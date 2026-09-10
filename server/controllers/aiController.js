@@ -1,6 +1,6 @@
 import OpenAI from "openai";
 import sql from "../configs/db.js";
-import { clerkClient } from "@clerk/express";
+import { incrementUsage } from "../middlewares/auth.js";
 import axios from "axios";
 import { v2 as cloudinary } from "cloudinary";
 import fs from 'fs'
@@ -44,11 +44,7 @@ export const generateArticle = async (req, res)=>{
         VALUES (${userId}, ${prompt}, ${content}, 'article')`;
 
         if(plan !== 'premium'){
-            await clerkClient.users.updateUserMetadata(userId, {
-                privateMetadata:{
-                    free_usage: free_usage + 1
-                }
-            })
+            await incrementUsage(userId, free_usage);
         }
 
         res.json({ success: true, content})
@@ -102,9 +98,7 @@ export const summarizeText = async (req, res) => {
 
     // Update free usage count if not premium
     if (plan !== "premium") {
-      await clerkClient.users.updateUserMetadata(userId, {
-        privateMetadata: { free_usage: free_usage + 1 },
-      });
+      await incrementUsage(userId, free_usage);
     }
 
     res.json({ success: true, summary });
@@ -156,9 +150,7 @@ export const generateQuickCode = async (req, res) => {
 
     // Update usage
     if (plan !== "premium") {
-      await clerkClient.users.updateUserMetadata(userId, {
-        privateMetadata: { free_usage: free_usage + 1 },
-      });
+      await incrementUsage(userId, free_usage);
     }
 
     res.json({ success: true, code });

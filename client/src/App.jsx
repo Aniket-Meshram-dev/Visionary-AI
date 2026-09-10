@@ -12,11 +12,13 @@ import Community from './pages/Community'
 import QuickCode from './pages/QuickCode'  
 import SummarizeArticle from './pages/SummarizeArticle'
 import { Toaster } from 'react-hot-toast'
+import AuthModal from './components/AuthModal'
 
 const App = () => {
   return (
     <div>
-      <Toaster />
+      <Toaster position='top-right' />
+      <AuthModal />
       <Routes>
         <Route path='/' element={<Home />} />
         <Route path='/ai' element={<Layout />}>

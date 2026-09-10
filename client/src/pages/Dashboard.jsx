@@ -15,7 +15,7 @@ import {
   Clock,
   Layers,
 } from 'lucide-react'
-import { Protect, useAuth, useUser } from '@clerk/clerk-react'
+import { useAuth, Protect } from '../context/AuthContext'
 import CreationItem from '../components/CreationItem'
 import axios from 'axios'
 import toast from 'react-hot-toast'
@@ -29,12 +29,10 @@ const Dashboard = () => {
   const [searchQuery, setSearchQuery] = useState('')
   const [activeFilter, setActiveFilter] = useState('all')
 
-  const { getToken } = useAuth()
-  const { user } = useUser()
+  const { getToken, user, plan, usage } = useAuth()
   const navigate = useNavigate()
 
-  const usage = typeof user?.publicMetadata?.usage === 'number' ? user.publicMetadata.usage : 0
-  const isPremium = user?.publicMetadata?.plan === 'premium'
+  const isPremium = plan === 'premium'
 
   const getDashboardData = async () => {
     try {

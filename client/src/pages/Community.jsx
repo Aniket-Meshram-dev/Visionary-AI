@@ -1,4 +1,4 @@
-import { useAuth, useUser } from '@clerk/clerk-react'
+import { useAuth } from '../context/AuthContext'
 import React, { useEffect, useMemo, useState } from 'react'
 import {
   Heart,
@@ -24,17 +24,18 @@ axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
 
 const Community = () => {
   const [creations, setCreations] = useState([])
-  const { user } = useUser()
+  const { user, getToken, openSignIn } = useAuth()
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState('all')
   const [copiedId, setCopiedId] = useState(null)
-  const { getToken } = useAuth()
 
   const fetchCreations = async () => {
     try {
+      const token = await getToken()
+      const headers = token ? { Authorization: `Bearer ${token}` } : {}
       const { data } = await axios.get('/api/user/get-published-creations', {
-        headers: { Authorization: `Bearer ${await getToken()}` },
+        headers,
       })
       if (data.success) {
         setCreations(data.creations)
@@ -48,7 +49,10 @@ const Community = () => {
   }
 
   const imageLikeToggle = async (id) => {
-    if (!user) return
+    if (!user) {
+      openSignIn('sign-in')
+      return
+    }
     const userIdStr = user.id.toString()
 
     // Optimistic UI update

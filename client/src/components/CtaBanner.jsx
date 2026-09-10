@@ -1,12 +1,11 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useUser, useClerk } from '@clerk/clerk-react'
+import { useAuth } from '../context/AuthContext'
 import { ArrowRight, Sparkles, CheckCircle2 } from 'lucide-react'
 
 const CtaBanner = () => {
   const navigate = useNavigate()
-  const { user } = useUser()
-  const { openSignIn } = useClerk()
+  const { user, openSignIn } = useAuth()
 
   const handleCtaClick = () => {
     if (user) {

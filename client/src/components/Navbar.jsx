@@ -1,14 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { assets } from '../assets/assets'
-import { useNavigate, Link, useLocation } from 'react-router-dom'
-import { ArrowRight, Menu, X, Sparkles, LayoutDashboard } from 'lucide-react'
-import { useClerk, UserButton, useUser } from '@clerk/clerk-react'
+import { useNavigate, useLocation } from 'react-router-dom'
+import { ArrowRight, Menu, X, LayoutDashboard } from 'lucide-react'
+import { useAuth } from '../context/AuthContext'
+import UserDropdown from './UserDropdown'
 
 const Navbar = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { user } = useUser()
-  const { openSignIn } = useClerk()
+  const { user, openSignIn } = useAuth()
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
 
@@ -81,11 +81,11 @@ const Navbar = () => {
               >
                 <LayoutDashboard className='w-3.5 h-3.5' /> Dashboard
               </button>
-              <UserButton />
+              <UserDropdown />
             </div>
           ) : (
             <button
-              onClick={openSignIn}
+              onClick={() => openSignIn('sign-in')}
               className='flex items-center gap-2 rounded-full text-xs sm:text-sm font-medium cursor-pointer bg-primary hover:bg-[#4338CA] text-white px-5 py-2.5 shadow-sm hover:shadow-md transition-all'
             >
               Get started <ArrowRight className='w-4 h-4' />
@@ -95,10 +95,10 @@ const Navbar = () => {
 
         {/* Mobile menu button */}
         <div className='flex items-center gap-2 sm:hidden'>
-          {user && <UserButton />}
+          {user && <UserDropdown />}
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className='p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+            className='p-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 cursor-pointer'
             aria-label='Toggle Menu'
           >
             {mobileMenuOpen ? <X className='w-6 h-6' /> : <Menu className='w-6 h-6' />}
@@ -125,7 +125,7 @@ const Navbar = () => {
                   setMobileMenuOpen(false)
                   navigate('/ai')
                 }}
-                className='w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-white bg-primary rounded-lg'
+                className='w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-white bg-primary rounded-lg cursor-pointer'
               >
                 <LayoutDashboard className='w-4 h-4' /> Open Dashboard
               </button>
@@ -133,9 +133,9 @@ const Navbar = () => {
               <button
                 onClick={() => {
                   setMobileMenuOpen(false)
-                  openSignIn()
+                  openSignIn('sign-in')
                 }}
-                className='w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-white bg-primary rounded-lg'
+                className='w-full flex items-center justify-center gap-2 py-2.5 text-sm font-semibold text-white bg-primary rounded-lg cursor-pointer'
               >
                 Get started <ArrowRight className='w-4 h-4' />
               </button>
@@ -148,4 +148,3 @@ const Navbar = () => {
 }
 
 export default Navbar
-

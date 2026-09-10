@@ -184,7 +184,7 @@ QuickAI delivers an end-to-end software solution combining modern web frontend t
 | **Vite 7** | Ultra-fast build tool and development server |
 | **Tailwind CSS v4** | Modern utility-first styling system with custom theme tokens |
 | **React Router DOM v7** | Client-side nested routing and layout architecture |
-| **@clerk/clerk-react** | User identity, session management, and pricing tables |
+| **@supabase/supabase-js** | Authentication, JWT sessions, OAuth, and user metadata |
 | **Axios** | HTTP client for backend REST API communication |
 | **React Markdown** | Renders AI responses with Markdown formatting |
 | **Lucide React** | Clean, modern iconography |
@@ -196,8 +196,8 @@ QuickAI delivers an end-to-end software solution combining modern web frontend t
 | :--- | :--- |
 | **Node.js (ES Modules)** | JavaScript runtime environment |
 | **Express 5** | Web framework powering REST API routes and middlewares |
+| **@supabase/supabase-js** | Supabase Admin SDK for token verification and user metadata |
 | **@neondatabase/serverless**| Lightweight, low-latency PostgreSQL serverless driver |
-| **@clerk/express** | Server-side authentication and JWT token validation |
 | **OpenAI SDK** | Configured to interface with Google's Gemini 2.0 Flash endpoint |
 | **Cloudinary SDK** | Media uploads, storage, and AI transformations |
 | **Multer** | Multipart/form-data handler for image and PDF uploads |

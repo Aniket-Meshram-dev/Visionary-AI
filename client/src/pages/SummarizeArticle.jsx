@@ -13,7 +13,7 @@ import {
   Copy,
 } from 'lucide-react'
 import axios from 'axios'
-import { useAuth, useUser } from '@clerk/clerk-react'
+import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import Markdown from 'react-markdown'
 
@@ -33,8 +33,7 @@ const SummarizeArticle = () => {
   const [summary, setSummary] = useState('')
   const [copied, setCopied] = useState(false)
 
-  const { getToken } = useAuth()
-  const { user } = useUser()
+  const { getToken, user } = useAuth()
 
   const originalWordCount = inputText ? inputText.trim().split(/\s+/).filter(Boolean).length : 0
   const summaryWordCount = summary ? summary.trim().split(/\s+/).filter(Boolean).length : 0

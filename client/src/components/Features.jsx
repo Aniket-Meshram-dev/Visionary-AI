@@ -29,7 +29,7 @@ const Features = () => {
     },
     {
       title: 'Secure & Private Cloud',
-      description: 'Enterprise Clerk authentication and secure Neon PostgreSQL cloud ensure your account and data are protected.',
+      description: 'Supabase enterprise-grade authentication and PostgreSQL ensure your account and creations are completely protected.',
       icon: ShieldCheck,
       gradient: 'from-indigo-500 to-cyan-600',
     },

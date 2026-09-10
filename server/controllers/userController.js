@@ -85,3 +85,38 @@ export const deleteUserCreation = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+
+export const getUserProfile = async (req, res) => {
+  try {
+    res.json({
+      success: true,
+      userId: req.userId,
+      plan: req.plan,
+      free_usage: req.free_usage,
+      user: {
+        id: req.user.id,
+        email: req.user.email,
+        metadata: req.user.user_metadata,
+      },
+    });
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+
+export const upgradePlan = async (req, res) => {
+  try {
+    const { updateUserPlan } = await import("../middlewares/auth.js");
+    const { plan = "premium" } = req.body;
+    const updated = await updateUserPlan(req.userId, plan);
+
+    if (updated) {
+      res.json({ success: true, message: `Successfully upgraded to ${plan} plan!` });
+    } else {
+      res.json({ success: false, message: "Failed to update plan." });
+    }
+  } catch (error) {
+    res.json({ success: false, message: error.message });
+  }
+};
+

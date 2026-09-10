@@ -1,4 +1,4 @@
-import { Protect, useClerk, useUser } from '@clerk/clerk-react'
+import { useAuth, Protect } from '../context/AuthContext'
 import {
   Eraser,
   FileText,
@@ -32,12 +32,10 @@ const navItems = [
 ]
 
 const Sidebar = ({ sidebar, setSidebar }) => {
-  const { user } = useUser()
-  const { signOut, openUserProfile } = useClerk()
+  const { user, signOut, plan, usage } = useAuth()
   const navigate = useNavigate()
 
-  const usage = typeof user?.publicMetadata?.usage === 'number' ? user.publicMetadata.usage : 0
-  const isPremium = user?.publicMetadata?.plan === 'premium'
+  const isPremium = plan === 'premium'
   const maxUsage = 10
   const remaining = Math.max(0, maxUsage - usage)
   const percent = Math.min(100, Math.round((usage / maxUsage) * 100))
@@ -185,7 +183,7 @@ const Sidebar = ({ sidebar, setSidebar }) => {
         {/* Footer User Profile & SignOut */}
         <div className='border-t border-slate-200/80 p-3 flex items-center justify-between bg-slate-50/50'>
           <div
-            onClick={openUserProfile}
+            onClick={() => navigate('/ai')}
             className='flex items-center gap-2.5 min-w-0 cursor-pointer hover:opacity-80 transition py-1 px-1.5 rounded-lg hover:bg-slate-100/80'
           >
             <img

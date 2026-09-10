@@ -3,13 +3,26 @@ import { Outlet, useNavigate, useLocation } from 'react-router-dom'
 import { assets } from '../assets/assets'
 import { Menu, X, ArrowLeft, Sparkles, ExternalLink } from 'lucide-react'
 import Sidebar from '../components/Sidebar'
-import { SignIn, useUser, UserButton } from '@clerk/clerk-react'
+import { useAuth } from '../context/AuthContext'
+import UserDropdown from '../components/UserDropdown'
+import { AuthCard } from '../components/AuthModal'
 
 const Layout = () => {
   const navigate = useNavigate()
   const location = useLocation()
   const [sidebar, setSidebar] = useState(false)
-  const { user } = useUser()
+  const { user, loading } = useAuth()
+
+  if (loading) {
+    return (
+      <div className='min-h-screen flex items-center justify-center bg-[#F8FAFC]'>
+        <div className='flex flex-col items-center gap-3'>
+          <div className='w-10 h-10 border-3 border-indigo-600 border-t-transparent rounded-full animate-spin' />
+          <p className='text-xs font-medium text-slate-500'>Loading Visionary.ai Workspace...</p>
+        </div>
+      </div>
+    )
+  }
 
   return user ? (
     <div className='flex flex-col items-start justify-start h-screen bg-[#F8FAFC] text-slate-900'>
@@ -18,7 +31,7 @@ const Layout = () => {
         <div className='flex items-center gap-3'>
           <button
             onClick={() => setSidebar(!sidebar)}
-            className='p-2 -ml-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 sm:hidden'
+            className='p-2 -ml-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 sm:hidden cursor-pointer'
             aria-label='Toggle Sidebar'
           >
             {sidebar ? <X className='w-5 h-5' /> : <Menu className='w-5 h-5' />}
@@ -41,7 +54,7 @@ const Layout = () => {
             <ArrowLeft className='w-3.5 h-3.5' /> Landing Page
           </button>
           <div className='h-4 w-[1px] bg-gray-200 hidden md:block' />
-          <UserButton />
+          <UserDropdown />
         </div>
       </nav>
 
@@ -69,11 +82,10 @@ const Layout = () => {
       </div>
 
       <div className='w-full max-w-md'>
-        <SignIn routing="hash" />
+        <AuthCard />
       </div>
     </div>
   )
 }
 
 export default Layout
-

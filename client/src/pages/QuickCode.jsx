@@ -11,7 +11,7 @@ import {
   Layers,
 } from 'lucide-react'
 import axios from 'axios'
-import { useAuth, useUser } from '@clerk/clerk-react'
+import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
@@ -43,8 +43,7 @@ const QuickCode = () => {
   const [generatedCode, setGeneratedCode] = useState('')
   const [copied, setCopied] = useState(false)
 
-  const { getToken } = useAuth()
-  const { user } = useUser()
+  const { getToken, user } = useAuth()
 
   const onSubmitHandler = async (e) => {
     e.preventDefault()

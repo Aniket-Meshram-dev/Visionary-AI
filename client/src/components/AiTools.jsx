@@ -1,13 +1,12 @@
 import React, { useState } from 'react'
 import { AiToolsData } from '../assets/assets'
 import { useNavigate } from 'react-router-dom'
-import { useUser, useClerk } from '@clerk/clerk-react'
+import { useAuth } from '../context/AuthContext'
 import { ArrowRight, Sparkles, Wand2 } from 'lucide-react'
 
 const AiTools = () => {
   const navigate = useNavigate()
-  const { user } = useUser()
-  const { openSignIn } = useClerk()
+  const { user, openSignIn } = useAuth()
   const [selectedCategory, setSelectedCategory] = useState('all')
 
   const toolCategories = {

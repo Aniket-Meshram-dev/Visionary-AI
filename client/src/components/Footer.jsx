@@ -85,7 +85,7 @@ const Footer = () => {
               <li>Google Gemini 2.5</li>
               <li>Clipdrop AI Diffusion</li>
               <li>Neon Serverless Cloud</li>
-              <li>Clerk Enterprise Auth</li>
+              <li>Supabase Auth Ecosystem</li>
               <li>Cloudinary CDN</li>
             </ul>
           </div>

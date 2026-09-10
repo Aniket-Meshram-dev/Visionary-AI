@@ -12,7 +12,7 @@ import {
   CheckCircle2,
 } from 'lucide-react'
 import axios from 'axios'
-import { useAuth, useUser } from '@clerk/clerk-react'
+import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 import Markdown from 'react-markdown'
 
@@ -29,8 +29,7 @@ const ReviewResume = () => {
   const [copied, setCopied] = useState(false)
   const [dragActive, setDragActive] = useState(false)
 
-  const { getToken } = useAuth()
-  const { user } = useUser()
+  const { getToken, user } = useAuth()
 
   const handleFileChange = (selectedFile) => {
     if (!selectedFile) return

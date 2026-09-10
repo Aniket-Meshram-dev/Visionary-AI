@@ -11,7 +11,7 @@ import {
   ArrowRight,
 } from 'lucide-react'
 import axios from 'axios'
-import { useAuth, useUser } from '@clerk/clerk-react'
+import { useAuth } from '../context/AuthContext'
 import toast from 'react-hot-toast'
 
 axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
@@ -33,8 +33,7 @@ const RemoveObject = () => {
   const [content, setContent] = useState('')
   const [dragActive, setDragActive] = useState(false)
 
-  const { getToken } = useAuth()
-  const { user } = useUser()
+  const { getToken, user } = useAuth()
 
   const handleFileChange = (selectedFile) => {
     if (!selectedFile) return
