@@ -1,5 +1,5 @@
 import OpenAI from "openai";
-import sql from "../configs/db.js";
+import { supabaseAdmin } from "../configs/supabase.js";
 import { incrementUsage } from "../middlewares/auth.js";
 import axios from "axios";
 import { v2 as cloudinary } from "cloudinary";
@@ -18,7 +18,7 @@ const AI_MODEL = process.env.GROQ_API_KEY ? "openai/gpt-oss-120b" : "gemini-2.0-
 
 export const generateArticle = async (req, res)=>{
     try {
-        const { userId } = req.auth();
+        const userId = req.userId || req.auth?.()?.userId;
         const { prompt, length } = req.body;
         const plan = req.plan;
         const free_usage = req.free_usage;
@@ -40,8 +40,16 @@ export const generateArticle = async (req, res)=>{
 
         const content = response.choices[0].message.content
 
-        await sql` INSERT INTO creations (user_id, prompt, content, type) 
-        VALUES (${userId}, ${prompt}, ${content}, 'article')`;
+        const { error: insertError } = await supabaseAdmin.from('creations').insert([{
+            user_id: userId,
+            prompt,
+            content,
+            type: 'article',
+        }]);
+
+        if (insertError) {
+            console.error("Supabase insert error (generateArticle):", insertError.message);
+        }
 
         if(plan !== 'premium'){
             await incrementUsage(userId, free_usage);
@@ -49,16 +57,15 @@ export const generateArticle = async (req, res)=>{
 
         res.json({ success: true, content})
 
-
     } catch (error) {
-        console.log(error.message)
+        console.error("generateArticle error:", error.message)
         res.json({success: false, message: error.message})
     }
 }
 
 export const summarizeText = async (req, res) => {
   try {
-    const { userId } = req.auth();  // your auth middleware
+    const userId = req.userId || req.auth?.()?.userId;
     const { text, reduce_percent } = req.body;
     const plan = req.plan;
     const free_usage = req.free_usage;
@@ -93,8 +100,17 @@ export const summarizeText = async (req, res) => {
 
     const summary = response.choices[0].message.content;
 
-    // Save summary in DB
-    await sql`INSERT INTO creations (user_id, prompt, content, type) VALUES (${userId}, ${prompt}, ${summary}, 'summary')`;
+    // Save summary in Supabase DB
+    const { error: insertError } = await supabaseAdmin.from('creations').insert([{
+        user_id: userId,
+        prompt,
+        content: summary,
+        type: 'summary',
+    }]);
+
+    if (insertError) {
+        console.error("Supabase insert error (summarizeText):", insertError.message);
+    }
 
     // Update free usage count if not premium
     if (plan !== "premium") {
@@ -110,10 +126,10 @@ export const summarizeText = async (req, res) => {
 
 export const generateQuickCode = async (req, res) => {
   try {
-    const { userId } = req.auth(); // your auth middleware
+    const userId = req.userId || req.auth?.()?.userId;
     const { prompt, language, maxTokens = 500 } = req.body;
-    const plan = req.plan;           // if you have plan info from middleware
-    const free_usage = req.free_usage; // usage limits
+    const plan = req.plan;
+    const free_usage = req.free_usage;
 
     if (!prompt || !language) {
       return res.status(400).json({ success: false, message: "Missing prompt or language" });
@@ -145,8 +161,17 @@ export const generateQuickCode = async (req, res) => {
 
     const code = response.choices[0].message.content;
 
-    // Save creation to DB if needed
-    await sql`INSERT INTO creations (user_id, prompt, content, type) VALUES (${userId}, ${prompt}, ${code}, 'quick-code')`;
+    // Save creation to Supabase DB
+    const { error: insertError } = await supabaseAdmin.from('creations').insert([{
+        user_id: userId,
+        prompt,
+        content: code,
+        type: 'quick-code',
+    }]);
+
+    if (insertError) {
+        console.error("Supabase insert error (generateQuickCode):", insertError.message);
+    }
 
     // Update usage
     if (plan !== "premium") {
@@ -155,14 +180,14 @@ export const generateQuickCode = async (req, res) => {
 
     res.json({ success: true, code });
   } catch (error) {
-    console.error(error);
+    console.error("generateQuickCode error:", error);
     res.status(500).json({ success: false, message: error.message });
   }
 };
 
 export const generateImage = async (req, res)=>{
     try {
-        const { userId } = req.auth();
+        const userId = req.userId || req.auth?.()?.userId;
         const { prompt, publish } = req.body;
         const plan = req.plan;
 
@@ -170,7 +195,6 @@ export const generateImage = async (req, res)=>{
             return res.json({ success: false, message: "This feature is only available for premium subscriptions"})
         }
 
-        
         const formData = new FormData()
         formData.append('prompt', prompt)
         const {data} = await axios.post("https://clipdrop-api.co/text-to-image/v1", formData, {
@@ -181,15 +205,23 @@ export const generateImage = async (req, res)=>{
         const base64Image = `data:image/png;base64,${Buffer.from(data, 'binary').toString('base64')}`;
 
         const {secure_url} = await cloudinary.uploader.upload(base64Image)
-        
 
-        await sql` INSERT INTO creations (user_id, prompt, content, type, publish) 
-        VALUES (${userId}, ${prompt}, ${secure_url}, 'image', ${publish ?? false })`;
+        const { error: insertError } = await supabaseAdmin.from('creations').insert([{
+            user_id: userId,
+            prompt,
+            content: secure_url,
+            type: 'image',
+            publish: publish ?? false,
+        }]);
+
+        if (insertError) {
+            console.error("Supabase insert error (generateImage):", insertError.message);
+        }
 
         res.json({ success: true, content: secure_url})
 
     } catch (error) {
-        console.log(error.message)
+        console.error("generateImage error:", error.message)
         res.json({success: false, message: error.message})
     }
 }
@@ -197,7 +229,7 @@ export const generateImage = async (req, res)=>{
 export const removeImageBackground = async (req, res) => {
     const image = req.file;
     try {
-        const { userId } = req.auth();
+        const userId = req.userId || req.auth?.()?.userId;
         const plan = req.plan;
 
         if (plan !== 'premium') {
@@ -221,8 +253,16 @@ export const removeImageBackground = async (req, res) => {
         // Clean up temp file
         if (image?.path && fs.existsSync(image.path)) fs.unlinkSync(image.path);
 
-        await sql` INSERT INTO creations (user_id, prompt, content, type) 
-        VALUES (${userId}, 'Remove background from image', ${secure_url}, 'image')`;
+        const { error: insertError } = await supabaseAdmin.from('creations').insert([{
+            user_id: userId,
+            prompt: 'Remove background from image',
+            content: secure_url,
+            type: 'image',
+        }]);
+
+        if (insertError) {
+            console.error("Supabase insert error (removeImageBackground):", insertError.message);
+        }
 
         res.json({ success: true, content: secure_url });
 
@@ -236,7 +276,7 @@ export const removeImageBackground = async (req, res) => {
 export const removeImageObject = async (req, res) => {
     const image = req.file;
     try {
-        const { userId } = req.auth();
+        const userId = req.userId || req.auth?.()?.userId;
         const { object } = req.body;
         const plan = req.plan;
 
@@ -265,8 +305,16 @@ export const removeImageObject = async (req, res) => {
             resource_type: 'image'
         });
 
-        await sql` INSERT INTO creations (user_id, prompt, content, type) 
-        VALUES (${userId}, ${`Removed ${targetObject} from image`}, ${imageUrl}, 'image')`;
+        const { error: insertError } = await supabaseAdmin.from('creations').insert([{
+            user_id: userId,
+            prompt: `Removed ${targetObject} from image`,
+            content: imageUrl,
+            type: 'image',
+        }]);
+
+        if (insertError) {
+            console.error("Supabase insert error (removeImageObject):", insertError.message);
+        }
 
         res.json({ success: true, content: imageUrl });
 
@@ -280,7 +328,7 @@ export const removeImageObject = async (req, res) => {
 export const resumeReview = async (req, res) => {
     const resume = req.file;
     try {
-        const { userId } = req.auth();
+        const userId = req.userId || req.auth?.()?.userId;
         const plan = req.plan;
 
         if (plan !== 'premium') {
@@ -322,8 +370,16 @@ export const resumeReview = async (req, res) => {
 
         const content = response.choices[0].message.content;
 
-        await sql` INSERT INTO creations (user_id, prompt, content, type) 
-        VALUES (${userId}, 'Review the uploaded resume', ${content}, 'resume-review')`;
+        const { error: insertError } = await supabaseAdmin.from('creations').insert([{
+            user_id: userId,
+            prompt: 'Review the uploaded resume',
+            content,
+            type: 'resume-review',
+        }]);
+
+        if (insertError) {
+            console.error("Supabase insert error (resumeReview):", insertError.message);
+        }
 
         res.json({ success: true, content });
 
@@ -332,4 +388,4 @@ export const resumeReview = async (req, res) => {
         console.error("resumeReview error:", error.message);
         res.json({ success: false, message: error.message });
     }
-};
+};
