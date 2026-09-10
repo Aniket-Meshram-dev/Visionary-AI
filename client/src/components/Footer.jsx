@@ -1,43 +1,109 @@
-import React from 'react'
-import { assets } from '../assets/assets'
+import React from "react";
+import { assets } from "../assets/assets";
+import { useNavigate } from "react-router-dom";
+import { ArrowUpRight, Github, Twitter, Linkedin, Sparkles } from "lucide-react";
 
 const Footer = () => {
-  return (
-    <footer className="px-6 md:px-16 lg:px-24 xl:px-32 pt-8 w-full text-gray-500 mt-20">
-    <div className="flex flex-col md:flex-row justify-between w-full gap-10 border-b border-gray-500/30 pb-6">
-        <div className="md:max-w-96">
-            <img className="h-9" src={assets.logo} alt="logo"/>
-            <p className="mt-6 text-sm">
-                Experience the power of AI with QuickAi. <br />Transform your content creation with our suite of premium AI tools. Write articles, generate images, and enhance your workflow.
-            </p>
-        </div>
-        <div className="flex-1 flex items-start md:justify-end gap-20">
-            <div>
-                <h2 className="font-semibold mb-5 text-gray-800">Company</h2>
-                <ul className="text-sm space-y-2">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">About us</a></li>
-                    <li><a href="#">Contact us</a></li>
-                    <li><a href="#">Privacy policy</a></li>
-                </ul>
-            </div>
-            <div>
-                <h2 className="font-semibold text-gray-800 mb-5">Subscribe to our newsletter</h2>
-                <div className="text-sm space-y-2">
-                    <p>The latest news, articles, and resources, sent to your inbox weekly.</p>
-                    <div className="flex items-center gap-2 pt-4">
-                        <input className="border border-gray-500/30 placeholder-gray-500 focus:ring-2 ring-indigo-600 outline-none w-full max-w-64 h-9 rounded px-2" type="email" placeholder="Enter your email" />
-                        <button className="bg-primary w-24 h-9 text-white rounded cursor-pointer">Subscribe</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <p className="pt-4 text-center text-xs md:text-sm pb-5">
-        Copyright 2025 © GreatStack. All Right Reserved.
-    </p>
-</footer>
-  )
-}
+  const navigate = useNavigate();
 
-export default Footer
+  return (
+    <footer className="w-full bg-slate-900 text-gray-400 pt-16 pb-12 border-t border-slate-800">
+      <div className="max-w-7xl mx-auto px-6 sm:px-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-10 pb-12 border-b border-slate-800">
+          {/* Brand Col */}
+          <div className="lg:col-span-2 space-y-4">
+            <div className="flex items-center gap-3 cursor-pointer" onClick={() => navigate('/')}>
+              <img alt="Visionary.ai" className="h-8 object-contain" src={assets.logoLight} />
+            </div>
+            <p className="text-sm text-gray-400 max-w-sm leading-relaxed">
+              Empowering creators, engineers, and marketers worldwide with cutting-edge multi-modal AI tools powered by Google Gemini and Clipdrop.
+            </p>
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-[12px] font-medium text-emerald-400">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse" />
+              All AI Models Operational
+            </div>
+          </div>
+
+          {/* Tools Col */}
+          <div>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+              AI Tools
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              <li>
+                <a href="#tools" className="hover:text-white transition">AI Article Writer</a>
+              </li>
+              <li>
+                <a href="#tools" className="hover:text-white transition">Image Generation</a>
+              </li>
+              <li>
+                <a href="#tools" className="hover:text-white transition">Quick Code Generator</a>
+              </li>
+              <li>
+                <a href="#tools" className="hover:text-white transition">Background Removal</a>
+              </li>
+              <li>
+                <a href="#tools" className="hover:text-white transition">Resume Reviewer</a>
+              </li>
+            </ul>
+          </div>
+
+          {/* Navigation Col */}
+          <div>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+              Explore
+            </h4>
+            <ul className="space-y-2.5 text-sm">
+              <li>
+                <button onClick={() => navigate('/ai/community')} className="hover:text-white transition cursor-pointer flex items-center gap-1">
+                  Community Feed <ArrowUpRight className="w-3.5 h-3.5" />
+                </button>
+              </li>
+              <li>
+                <a href="#how-it-works" className="hover:text-white transition">How It Works</a>
+              </li>
+              <li>
+                <a href="#features" className="hover:text-white transition">Why Visionary</a>
+              </li>
+              <li>
+                <a href="#pricing" className="hover:text-white transition">Pricing Plans</a>
+              </li>
+              <li>
+                <button onClick={() => navigate('/ai')} className="hover:text-white transition cursor-pointer">
+                  Dashboard
+                </button>
+              </li>
+            </ul>
+          </div>
+
+          {/* Trust & Links */}
+          <div>
+            <h4 className="text-sm font-semibold text-white uppercase tracking-wider mb-4">
+              Architecture
+            </h4>
+            <ul className="space-y-2.5 text-sm text-gray-400">
+              <li>Google Gemini 2.5</li>
+              <li>Clipdrop AI Diffusion</li>
+              <li>Neon Serverless Cloud</li>
+              <li>Clerk Enterprise Auth</li>
+              <li>Cloudinary CDN</li>
+            </ul>
+          </div>
+        </div>
+
+        {/* Bottom copyright row */}
+        <div className="pt-8 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
+          <p>© {new Date().getFullYear()} Visionary AI. All rights reserved.</p>
+          <div className="flex items-center gap-6">
+            <span className="hover:text-gray-400 transition cursor-pointer">Privacy Policy</span>
+            <span className="hover:text-gray-400 transition cursor-pointer">Terms of Service</span>
+            <span className="hover:text-gray-400 transition cursor-pointer">Security</span>
+          </div>
+        </div>
+      </div>
+    </footer>
+  );
+};
+
+export default Footer;
+
