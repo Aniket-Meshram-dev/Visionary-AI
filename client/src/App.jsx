@@ -1,4 +1,4 @@
-import React, { Suspense, lazy } from 'react'
+import React, { Suspense, lazy, useEffect } from 'react'
 import { Route, Routes } from 'react-router-dom'
 import { Toaster } from 'react-hot-toast'
 import AuthModal from './components/AuthModal'
@@ -22,6 +22,11 @@ const PublicShare = lazy(() => import('./pages/PublicShare'))
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
 
 const App = () => {
+  // Silent wake-up ping: As soon as user lands on frontend, start waking up Render backend
+  useEffect(() => {
+    const apiUrl = (import.meta.env.VITE_BASE_URL || 'http://localhost:3000').replace(/\/+$/, '')
+    fetch(`${apiUrl}/health`, { mode: 'cors' }).catch(() => {})
+  }, [])
   return (
     <div className='min-h-screen bg-slate-950 font-sans'>
       <Toaster
