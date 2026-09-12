@@ -117,9 +117,25 @@ To guarantee you don't face the common hosting bugs, the following fixes are alr
 6. **Trailing Slash Stripping**:
    - Automatically strips any accidental trailing slash (`/`) from `VITE_BASE_URL`.
 
+## Part 4: Keep Render Backend 24/7 Awake (UptimeRobot Setup)
+
+Render's free tier goes to sleep after 15 minutes of inactivity. To keep your backend awake 24/7 with zero cold starts:
+
+1. Create a free account at **[uptimerobot.com](https://uptimerobot.com/)**.
+2. Click **"+ Add New Monitor"**.
+3. Fill in these details:
+   - **Monitor Type**: `HTTP(s)`
+   - **Friendly Name**: `Visionary AI Backend Health`
+   - **URL (or IP)**: `https://<your-render-backend-name>.onrender.com/health`
+   - **Monitoring Interval**: `Every 5 minutes` (or 10 minutes)
+   - **Monitor Timeout**: `30 seconds`
+4. Check your notification email to receive alerts if the server is ever down.
+5. Click **"Create Monitor"**.
+6. **Result**: UptimeRobot will ping `/health` continuously, keeping your Render backend warm 24/7 so users never experience a 30-40 second delay!
+
 ---
 
-## Part 4: Post-Deploy Sanity Checklist
+## Part 5: Post-Deploy Sanity Checklist
 
 After both are live:
 - [ ] Visit your Cloudflare Pages URL: `https://your-project.pages.dev`
@@ -128,3 +144,4 @@ After both are live:
 - [ ] Try generating an image in **Generate Images**
 - [ ] Try auditing a resume in **Review Resume** (paste text or drop PDF)
 - [ ] Test page refresh on `/ai/review-resume` (should stay on page without 404)
+- [ ] Verify UptimeRobot status is green (Up 100%)
