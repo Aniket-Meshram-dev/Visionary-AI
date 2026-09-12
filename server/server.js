@@ -1,3 +1,8 @@
+import WebSocket from 'ws';
+if (typeof globalThis.WebSocket === 'undefined') {
+  globalThis.WebSocket = WebSocket;
+}
+
 import express from 'express';
 import cors from 'cors';
 import 'dotenv/config';

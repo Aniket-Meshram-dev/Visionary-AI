@@ -1,5 +1,10 @@
 import 'dotenv/config'
+import WebSocket from 'ws'
 import { createClient } from '@supabase/supabase-js'
+
+if (typeof globalThis.WebSocket === 'undefined') {
+  globalThis.WebSocket = WebSocket
+}
 
 const supabaseUrl = process.env.SUPABASE_URL || 'https://placeholder-project.supabase.co'
 const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'placeholder-service-key'
