@@ -18,7 +18,11 @@ export { branding };
 
 export const assets = {
     logo: branding.logoFull,
-    logoSmall: branding.logoMark,
+    logoFull: branding.logoFull,
+    logoLight: branding.logoLight,
+    logoIcon: branding.logoIcon,
+    logoSmall: branding.logoIcon,
+    logoMark: branding.logoIcon,
     profile_img_1,
     arrow_icon,
     user_group,
