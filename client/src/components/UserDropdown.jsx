@@ -9,6 +9,9 @@ import {
   Sparkles,
   ChevronDown,
   User as UserIcon,
+  Shield,
+  Layers,
+  Settings as SettingsIcon,
 } from 'lucide-react'
 
 const UserDropdown = () => {
@@ -55,15 +58,24 @@ const UserDropdown = () => {
       {open && (
         <div className='absolute right-0 mt-2 w-64 origin-top-right rounded-2xl bg-white border border-slate-200/80 shadow-xl shadow-slate-900/10 py-2 z-50 text-slate-800 animate-in fade-in zoom-in-95 duration-150'>
           {/* User Profile Header */}
-          <div className='px-4 py-3 border-b border-slate-100 flex items-center gap-3'>
+          <div
+            onClick={() => {
+              setOpen(false)
+              navigate('/ai/profile')
+            }}
+            className='px-4 py-3 border-b border-slate-100 flex items-center gap-3 cursor-pointer hover:bg-slate-50 transition'
+          >
             <img
               src={user.imageUrl}
               alt={user.fullName}
-              className='w-10 h-10 rounded-full object-cover ring-2 ring-indigo-100'
+              className='w-10 h-10 rounded-full object-cover ring-2 ring-indigo-100 shrink-0'
             />
             <div className='min-w-0 flex-1'>
               <p className='text-sm font-semibold text-slate-900 truncate'>{user.fullName}</p>
               <p className='text-xs text-slate-500 truncate'>{user.email}</p>
+              {user.headline && (
+                <p className='text-[10px] text-indigo-600 truncate mt-0.5'>{user.headline}</p>
+              )}
             </div>
           </div>
 
@@ -97,6 +109,28 @@ const UserDropdown = () => {
             <button
               onClick={() => {
                 setOpen(false)
+                navigate('/ai/creations')
+              }}
+              className='w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 rounded-xl transition cursor-pointer'
+            >
+              <Layers className='w-4 h-4' />
+              My Creations Vault
+            </button>
+
+            <button
+              onClick={() => {
+                setOpen(false)
+                navigate('/ai/profile')
+              }}
+              className='w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 rounded-xl transition cursor-pointer'
+            >
+              <SettingsIcon className='w-4 h-4' />
+              Profile & Preferences
+            </button>
+
+            <button
+              onClick={() => {
+                setOpen(false)
                 navigate('/ai/community')
               }}
               className='w-full flex items-center gap-2.5 px-3 py-2 text-xs font-medium text-slate-700 hover:text-indigo-600 hover:bg-indigo-50/60 rounded-xl transition cursor-pointer'
@@ -105,11 +139,24 @@ const UserDropdown = () => {
               Community Feed
             </button>
 
+            {user?.isAdmin && (
+              <button
+                onClick={() => {
+                  setOpen(false)
+                  navigate('/admin')
+                }}
+                className='w-full flex items-center gap-2.5 px-3 py-2 text-xs font-bold text-amber-600 hover:bg-amber-50/70 rounded-xl transition cursor-pointer border border-amber-200/50'
+              >
+                <Shield className='w-4 h-4 text-amber-500' />
+                Admin Control Center
+              </button>
+            )}
+
             {!isPremium && (
               <button
                 onClick={() => {
                   setOpen(false)
-                  navigate('/#pricing')
+                  navigate('/#pro-plan')
                 }}
                 className='w-full flex items-center gap-2.5 px-3 py-2 text-xs font-semibold text-indigo-600 hover:bg-indigo-50 rounded-xl transition cursor-pointer'
               >

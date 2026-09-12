@@ -1,83 +1,121 @@
-import React from 'react'
-import { dummyTestimonialData, assets } from '../assets/assets'
-import { Star, Quote, CheckCircle } from 'lucide-react'
+import React, { useEffect, useState } from 'react'
+import { Sparkles, Heart, ArrowRight, Layers, Image as ImageIcon } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
+import axios from 'axios'
 
 const Testimonials = () => {
-  const testimonials = [
-    ...dummyTestimonialData,
-    {
-      image: assets.profile_img_1,
-      name: 'Sarah Chen',
-      title: 'Senior Frontend Engineer, Apex Labs',
-      content: 'The Quick Code generator and Resume Reviewer are shockingly accurate. It refactored complex asynchronous code in seconds. An indispensable tool in my developer toolkit.',
-      rating: 5,
-    },
-  ]
+  const [creations, setCreations] = useState([])
+  const [loading, setLoading] = useState(true)
+  const navigate = useNavigate()
+
+  useEffect(() => {
+    let isMounted = true
+    const fetchLiveCreations = async () => {
+      try {
+        const baseURL = (import.meta.env.VITE_BASE_URL || 'http://localhost:3000').replace(/\/+$/, '')
+        const { data } = await axios.get(`${baseURL}/api/user/get-published-creations`)
+        if (data.success && isMounted) {
+          // Take top 4 most recent published creations
+          setCreations((data.creations || []).slice(0, 4))
+        }
+      } catch (err) {
+        console.warn('Notice: live creations showcase fetch:', err.message)
+      } finally {
+        if (isMounted) setLoading(false)
+      }
+    }
+    fetchLiveCreations()
+    return () => {
+      isMounted = false
+    }
+  }, [])
+
+  if (!loading && creations.length === 0) {
+    return null // Cleanly hides if no community creations are published yet
+  }
 
   return (
-    <section className='py-24 bg-slate-50/70 border-y border-gray-200/60'>
+    <section className='py-28 bg-[#07090E] border-y border-slate-800/80'>
       <div className='max-w-7xl mx-auto px-4 sm:px-8'>
         {/* Section Header */}
         <div className='text-center max-w-2xl mx-auto mb-16'>
-          <div className='inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-emerald-50 border border-emerald-100 text-xs font-semibold text-emerald-700 mb-4'>
-            <Star className='w-3.5 h-3.5 fill-emerald-600 text-emerald-600' /> Loved by Global Creators
+          <div className='inline-flex items-center gap-1.5 px-3.5 py-1 rounded-full bg-indigo-500/10 border border-indigo-500/20 text-xs font-semibold text-indigo-400 mb-4'>
+            <Sparkles className='w-3.5 h-3.5 text-indigo-400' /> Live Community Showcase
           </div>
-          <h2 className='text-3xl sm:text-5xl font-bold tracking-tight text-gray-900'>
-            Trusted by Creators & Developers
+          <h2 className='text-3xl sm:text-5xl font-extrabold tracking-tight text-white'>
+            Synthesized by Real Creators
           </h2>
-          <p className='mt-4 text-base sm:text-lg text-gray-500'>
-            Here is what professionals say about accelerating their content and design with Visionary AI.
+          <p className='mt-4 text-sm sm:text-base text-slate-400'>
+            Explore real, authentic AI assets generated and published by our community.
           </p>
         </div>
 
-        {/* Testimonials Grid */}
+        {/* Real Creations Grid */}
         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6'>
-          {testimonials.map((item, index) => (
+          {creations.map((item) => (
             <div
-              key={index}
-              className='p-6 rounded-2xl bg-white border border-gray-200/90 shadow-xs hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between'
+              key={item.id}
+              onClick={() => navigate('/ai/community')}
+              className='group p-5 rounded-3xl bg-slate-900/60 border border-slate-800/80 shadow-xl hover:border-indigo-500/50 hover:-translate-y-1 transition-all duration-300 flex flex-col justify-between backdrop-blur-xl cursor-pointer'
             >
               <div>
-                {/* Rating & Quote icon */}
-                <div className='flex items-center justify-between mb-4'>
-                  <div className='flex items-center gap-0.5 text-amber-500'>
-                    {[...Array(5)].map((_, i) => (
-                      <Star
-                        key={i}
-                        className={`w-4 h-4 ${
-                          i < item.rating
-                            ? 'fill-amber-400 text-amber-400'
-                            : 'fill-gray-200 text-gray-200'
-                        }`}
-                      />
-                    ))}
+                {item.type === 'image' ? (
+                  <div className='w-full h-44 rounded-2xl overflow-hidden mb-4 border border-slate-800 relative bg-slate-950'>
+                    <img
+                      src={item.content}
+                      alt={item.prompt}
+                      className='w-full h-full object-cover group-hover:scale-105 transition-transform duration-500'
+                    />
+                    <span className='absolute bottom-2 right-2 px-2 py-0.5 rounded-md bg-black/70 backdrop-blur-sm text-[10px] font-mono text-white font-semibold flex items-center gap-1'>
+                      <ImageIcon className='w-3 h-3 text-amber-400' /> 4K Render
+                    </span>
                   </div>
-                  <Quote className='w-6 h-6 text-indigo-200' />
+                ) : (
+                  <div className='w-full h-44 p-3.5 rounded-2xl mb-4 border border-slate-800/80 bg-slate-950 font-mono text-xs text-slate-300 line-clamp-6 overflow-hidden relative'>
+                    {item.content}
+                    <div className='absolute inset-x-0 bottom-0 h-10 bg-gradient-to-t from-slate-950 to-transparent' />
+                  </div>
+                )}
+
+                <div className='flex items-center gap-2 mb-2'>
+                  <span className='text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded bg-slate-800 text-indigo-400 border border-slate-700'>
+                    {item.type}
+                  </span>
+                  <span className='text-[11px] text-slate-500 font-mono'>
+                    {new Date(item.created_at).toLocaleDateString()}
+                  </span>
                 </div>
 
-                {/* Content */}
-                <p className='text-gray-600 text-sm leading-relaxed mb-6 italic'>
-                  "{item.content}"
+                <p className='text-xs text-slate-300 font-medium line-clamp-2 leading-relaxed'>
+                  "{item.prompt}"
                 </p>
               </div>
 
-              {/* User profile info */}
-              <div className='flex items-center gap-3 pt-4 border-t border-gray-100'>
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  className='w-10 h-10 rounded-full object-cover border border-indigo-100 shadow-xs'
-                />
-                <div>
-                  <div className='flex items-center gap-1.5'>
-                    <h4 className='text-sm font-bold text-gray-900'>{item.name}</h4>
-                    <CheckCircle className='w-3.5 h-3.5 text-blue-500' />
-                  </div>
-                  <p className='text-[11px] text-gray-400 font-medium'>{item.title}</p>
-                </div>
+              <div className='flex items-center justify-between pt-4 mt-3 border-t border-slate-800/80 text-xs'>
+                <span className='text-slate-400 font-mono flex items-center gap-1.5'>
+                  <Heart
+                    className={`w-3.5 h-3.5 ${
+                      item.likes?.length ? 'fill-rose-500 text-rose-500' : 'text-slate-500'
+                    }`}
+                  />
+                  {item.likes?.length || 0} likes
+                </span>
+                <span className='text-indigo-400 group-hover:text-indigo-300 font-semibold flex items-center gap-1 text-[11px]'>
+                  View Asset{' '}
+                  <ArrowRight className='w-3 h-3 group-hover:translate-x-0.5 transition-transform' />
+                </span>
               </div>
             </div>
           ))}
+        </div>
+
+        <div className='text-center mt-12'>
+          <button
+            onClick={() => navigate('/ai/community')}
+            className='inline-flex items-center gap-2 px-6 py-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 text-slate-200 text-xs sm:text-sm font-semibold hover:text-white transition cursor-pointer'
+          >
+            <Layers className='w-4 h-4 text-indigo-400' /> Explore Full Community Feed
+          </button>
         </div>
       </div>
     </section>

@@ -32,22 +32,45 @@ export const AuthProvider = ({ children }) => {
 
     const plan = meta.plan === 'premium' ? 'premium' : 'free'
     const usage = typeof meta.free_usage === 'number' ? meta.free_usage : 0
+    const headline = meta.headline || ''
+    const bio = meta.bio || ''
+    const preferences = meta.preferences || {
+      defaultTone: 'Professional',
+      defaultLanguage: 'javascript',
+      defaultAspect: '1:1',
+      autoSave: true,
+    }
+
+    const FIXED_ADMIN_EMAIL = 'admin@gmail.com'
+    const isAdmin = Boolean(
+      sbUser.email && sbUser.email.toLowerCase() === FIXED_ADMIN_EMAIL
+    )
 
     return {
       id: sbUser.id,
       email: sbUser.email,
       fullName,
       imageUrl: avatarUrl,
+      headline,
+      bio,
+      preferences,
       plan,
       usage,
+      isAdmin,
       user_metadata: meta,
       // Compatibility with previous Clerk publicMetadata shape:
       publicMetadata: {
         plan,
         usage,
+        isAdmin,
       },
       // Reload function
       reload: async () => {
+        try {
+          await supabase.auth.refreshSession()
+        } catch (e) {
+          // ignore session refresh errors
+        }
         const { data, error } = await supabase.auth.getUser()
         if (!error && data?.user) {
           setUser(formatUser(data.user))
@@ -175,11 +198,33 @@ export const AuthProvider = ({ children }) => {
         provider,
         options: {
           redirectTo: `${window.location.origin}/ai`,
+          skipBrowserRedirect: true,
         },
       })
 
       if (error) throw error
-      return { success: true, data }
+
+      if (data?.url) {
+        // Pre-check if the provider is enabled in Supabase to prevent redirecting to raw JSON 400
+        try {
+          const res = await fetch(data.url)
+          if (!res.ok) {
+            const text = await res.text()
+            if (text.includes('provider is not enabled')) {
+              toast.error(
+                'Google OAuth is not enabled in your Supabase project yet. Please use Email & Password below for instant access!',
+                { duration: 6000 }
+              )
+              return { success: false, message: 'Google provider is not enabled in Supabase' }
+            }
+          }
+        } catch (_) {
+          // If CORS prevents inspection, proceed with browser redirect
+        }
+
+        window.location.href = data.url
+        return { success: true, data }
+      }
     } catch (error) {
       const msg = error.message || `Failed to sign in with ${provider}`
       toast.error(msg)
@@ -210,7 +255,7 @@ export const AuthProvider = ({ children }) => {
       }
 
       const { data } = await axios.post(
-        `${import.meta.env.VITE_BASE_URL || 'http://localhost:3000'}/api/user/upgrade-plan`,
+        `${(import.meta.env.VITE_BASE_URL || 'http://localhost:3000').replace(/\/+$/, '')}/api/user/upgrade-plan`,
         { plan: 'premium' },
         { headers: { Authorization: `Bearer ${token}` } }
       )
@@ -229,6 +274,46 @@ export const AuthProvider = ({ children }) => {
       console.error('Upgrade plan error:', err)
       toast.error(err.message || 'Failed to upgrade plan')
       return false
+    }
+  }
+
+  // Update Profile Details (Full name, avatar, bio, headline, preferences)
+  const updateUserProfile = async (formDataOrObject) => {
+    try {
+      const token = await getToken()
+      if (!token) throw new Error('You must be signed in to update your profile')
+
+      let headers = { Authorization: `Bearer ${token}` }
+      let payload = formDataOrObject
+
+      if (!(formDataOrObject instanceof FormData)) {
+        headers['Content-Type'] = 'application/json'
+      }
+
+      const { data } = await axios.post('/api/user/update-profile', payload, { headers })
+
+      if (data.success) {
+        if (data.user) {
+          setUser((prev) => ({
+            ...prev,
+            fullName: data.user.fullName,
+            imageUrl: data.user.imageUrl || prev?.imageUrl,
+            headline: data.user.headline || '',
+            bio: data.user.bio || '',
+            preferences: data.user.preferences || prev?.preferences,
+            user_metadata: data.user.user_metadata || prev?.user_metadata,
+          }))
+        }
+        toast.success(data.message || 'Profile updated successfully!')
+        return { success: true, user: data.user }
+      } else {
+        toast.error(data.message || 'Failed to update profile')
+        return { success: false, message: data.message }
+      }
+    } catch (error) {
+      const msg = error.response?.data?.message || error.message || 'Error updating profile'
+      toast.error(msg)
+      return { success: false, message: msg }
     }
   }
 
@@ -258,8 +343,10 @@ export const AuthProvider = ({ children }) => {
       signOut,
       getToken,
       upgradeToPro,
+      updateUserProfile,
       plan: user?.plan || 'free',
       usage: user?.usage || 0,
+      isAdmin: Boolean(user?.isAdmin),
     }),
     [user, session, loading, isSignInOpen, authModalMode]
   )

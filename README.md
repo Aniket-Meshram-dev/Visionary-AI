@@ -44,7 +44,7 @@
 
 QuickAI delivers an end-to-end software solution combining modern web frontend technologies with multi-provider AI backend services. It implements:
 - **Zero-friction authentication & tier enforcement** with Clerk.
-- **Multi-modal AI inference**: Google Gemini 2.0 Flash via OpenAI-compatible endpoints, ClipDrop for text-to-image synthesis, and Cloudinary AI for generative media transformations.
+- **Multi-modal AI inference**: Google Gemini 2.0 Flash via OpenAI-compatible endpoints, FLUX.1 for photorealistic text-to-image synthesis, and Cloudinary AI for generative media transformations.
 - **Serverless PostgreSQL persistence** using Neon Database with raw parameterized SQL queries.
 - **Dynamic usage gating**: 10 free credits for standard tools and strict premium subscription gating for compute-intensive media features.
 
@@ -68,7 +68,7 @@ QuickAI delivers an end-to-end software solution combining modern web frontend t
                     │                    │             │                    │
                     ▼                    ▼             ▼                    ▼
           ┌──────────────────┐ ┌────────────────┐ ┌───────────────┐ ┌───────────────┐
-          │  Google Gemini   │ │  ClipDrop API  │ │  Cloudinary   │ │ Neon Postgres │
+          │  Google Gemini   │ │  FLUX.1 Engine │ │  Cloudinary   │ │ Neon Postgres │
           │    2.0 Flash     │ │ Text-to-Image  │ │ AI Media Ops  │ │  Database     │
           │ (Articles, Code, │ │                │ │ (BG / Object  │ │  (Creations & │
           │  Summary, Resume)│ │                │ │  Removal)     │ │   Likes)      │
@@ -112,7 +112,7 @@ QuickAI delivers an end-to-end software solution combining modern web frontend t
 
 ### 4. AI Image Generation (Premium)
 - **Route**: `/ai/generate-images`
-- **Engine**: ClipDrop API (`text-to-image/v1`) + Cloudinary CDN
+- **Engine**: FLUX.1 Photorealistic Engine + Cloudinary CDN
 - **Capabilities**:
   - High-resolution image generation from detailed text prompts.
   - 8 distinct artistic styles:
@@ -232,7 +232,7 @@ QuickAI-Full-Stack/
 │   │   ├── pages/                       # Application Views / Routes
 │   │   │   ├── Community.jsx            # Public community gallery with like system
 │   │   │   ├── Dashboard.jsx            # User history & creation analytics
-│   │   │   ├── GenerateImages.jsx       # ClipDrop AI text-to-image studio
+│   │   │   ├── GenerateImages.jsx       # FLUX.1 AI text-to-image studio
 │   │   │   ├── Home.jsx                 # Marketing landing page
 │   │   │   ├── Layout.jsx               # Authenticated shell layout (Navbar + Sidebar + Outlet)
 │   │   │   ├── QuickCode.jsx            # Multi-language code snippet generator
@@ -310,7 +310,7 @@ Base URL: `http://localhost:3000` (or your deployed server domain)
 | `POST` | `/api/ai/generate-article` | Required | `{ prompt, length }` | Generates full-length article (Free limit: 10) |
 | `POST` | `/api/ai/summarize-article` | Required | `{ text, reduce_percent }` | Summarizes input text by percentage |
 | `POST` | `/api/ai/generate-quick-code` | Required | `{ prompt, language, maxTokens }` | Generates pure code snippet |
-| `POST` | `/api/ai/generate-image` | **Premium** | `{ prompt, publish }` | Generates image via ClipDrop and uploads to Cloudinary |
+| `POST` | `/api/ai/generate-image` | **Premium** | `{ prompt, publish }` | Generates image via FLUX.1 and uploads to Cloudinary |
 | `POST` | `/api/ai/remove-image-background`| **Premium** | Multipart (`image`) | Strips image background via Cloudinary AI |
 | `POST` | `/api/ai/remove-image-object` | **Premium** | Multipart (`image`, `object`) | Removes object from photo via Cloudinary in-painting |
 | `POST` | `/api/ai/resume-review` | **Premium** | Multipart (`resume` [PDF]) | Evaluates resume strengths & recommendations |
@@ -344,9 +344,6 @@ CLERK_SECRET_KEY=sk_test_...
 
 # Google Gemini API Key
 GEMINI_API_KEY=AIzaSy...
-
-# ClipDrop API Key (for Text-to-Image)
-CLIPDROP_API_KEY=your_clipdrop_api_key
 
 # Cloudinary Credentials
 CLOUDINARY_CLOUD_NAME=your_cloud_name

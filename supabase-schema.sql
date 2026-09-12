@@ -48,12 +48,14 @@ CREATE POLICY "Users can insert own creations"
     FOR INSERT 
     WITH CHECK (auth.uid()::text = user_id);
 
--- User Policy: Users can update creations (e.g. toggle publish or likes)
+-- User Policy: Users can only update their own creations
 DROP POLICY IF EXISTS "Users can update their creations" ON public.creations;
-CREATE POLICY "Users can update creations" 
+DROP POLICY IF EXISTS "Users can update creations" ON public.creations;
+CREATE POLICY "Users can update their creations" 
     ON public.creations 
     FOR UPDATE 
-    USING (true);
+    USING (auth.uid()::text = user_id)
+    WITH CHECK (auth.uid()::text = user_id);
 
 -- User Policy: Users can delete their own creations
 DROP POLICY IF EXISTS "Users can delete their own creations" ON public.creations;

@@ -1,5 +1,6 @@
 import { useAuth } from '../context/AuthContext'
 import React, { useEffect, useMemo, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   Heart,
   Search,
@@ -15,20 +16,31 @@ import {
   ExternalLink,
   Calendar,
   Layers,
+  Share2,
 } from 'lucide-react'
 import axios from 'axios'
 import toast from 'react-hot-toast'
 import Markdown from 'react-markdown'
 
-axios.defaults.baseURL = import.meta.env.VITE_BASE_URL
+axios.defaults.baseURL = (import.meta.env.VITE_BASE_URL || 'http://localhost:3000').replace(/\/+$/, '')
 
 const Community = () => {
+  const navigate = useNavigate()
   const [creations, setCreations] = useState([])
   const { user, getToken, openSignIn } = useAuth()
   const [loading, setLoading] = useState(true)
   const [searchQuery, setSearchQuery] = useState('')
   const [activeTab, setActiveTab] = useState('all')
   const [copiedId, setCopiedId] = useState(null)
+
+  const handleRemix = (creation) => {
+    let path = '/ai/write-article'
+    if (creation.type === 'image') path = '/ai/generate-images'
+    else if (creation.type === 'quick-code') path = '/ai/quick-code'
+    else if (creation.type === 'summary') path = '/ai/summarize-article'
+    else if (creation.type === 'resume-review') path = '/ai/review-resume'
+    navigate(`${path}?prompt=${encodeURIComponent(creation.prompt)}`)
+  }
 
   const fetchCreations = async () => {
     try {
@@ -96,10 +108,18 @@ const Community = () => {
     })
   }
 
-  useEffect(() => {
-    if (user) {
-      fetchCreations()
+  const handleShare = (id) => {
+    const url = `${window.location.origin}/share/${id}`
+    if (navigator.clipboard) {
+      navigator.clipboard.writeText(url)
+      toast.success('Share link copied!')
+    } else {
+      window.open(`/share/${id}`, '_blank')
     }
+  }
+
+  useEffect(() => {
+    fetchCreations()
   }, [user])
 
   // Filter & search
@@ -186,17 +206,15 @@ const Community = () => {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key)}
-                className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${
-                  isActive
+                className={`px-3 py-1.5 rounded-xl text-xs font-medium whitespace-nowrap transition-all flex items-center gap-1.5 cursor-pointer ${isActive
                     ? 'bg-indigo-600 text-white shadow-xs'
                     : 'bg-white text-slate-600 border border-slate-200/80 hover:bg-slate-50 hover:text-slate-900'
-                }`}
+                  }`}
               >
                 <span>{tab.label}</span>
                 <span
-                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${
-                    isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
-                  }`}
+                  className={`text-[10px] px-1.5 py-0.2 rounded-full font-mono ${isActive ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-600'
+                    }`}
                 >
                   {tab.count}
                 </span>
@@ -298,25 +316,58 @@ const Community = () => {
                     </h3>
                   </div>
 
-                  <div className='flex items-center justify-between pt-2 border-t border-slate-100 text-xs text-slate-500'>
-                    {/* Copy Prompt */}
-                    <button
-                      onClick={() => handleCopyPrompt(creation.id, creation.prompt)}
-                      className='flex items-center gap-1 text-[11px] text-slate-500 hover:text-indigo-600 transition cursor-pointer'
-                      title='Copy prompt'
-                    >
-                      {copiedId === creation.id ? (
-                        <Check className='w-3.5 h-3.5 text-emerald-600' />
-                      ) : (
-                        <Clipboard className='w-3.5 h-3.5' />
-                      )}
-                      <span>{copiedId === creation.id ? 'Copied' : 'Prompt'}</span>
-                    </button>
+                  <div className='flex items-center justify-between pt-2.5 border-t border-slate-100 text-xs text-slate-500 gap-2 flex-wrap'>
+                    <div className='flex items-center gap-2'>
+                      {/* Copy Prompt */}
+                      <button
+                        onClick={() => handleCopyPrompt(creation.id, creation.prompt)}
+                        className='flex items-center gap-1 text-[11px] text-slate-500 hover:text-indigo-600 transition cursor-pointer'
+                        title='Copy prompt'
+                      >
+                        {copiedId === creation.id ? (
+                          <Check className='w-3.5 h-3.5 text-emerald-600' />
+                        ) : (
+                          <Clipboard className='w-3.5 h-3.5' />
+                        )}
+                        <span>{copiedId === creation.id ? 'Copied' : 'Prompt'}</span>
+                      </button>
+
+                      {/* Remix Prompt */}
+                      <button
+                        onClick={() => handleRemix(creation)}
+                        className='flex items-center gap-1 text-[11px] text-indigo-600 hover:text-indigo-700 font-medium transition cursor-pointer'
+                        title='Remix this prompt in AI Studio'
+                      >
+                        <Sparkles className='w-3.5 h-3.5' />
+                        <span>Remix</span>
+                      </button>
+
+                      {/* Share public link */}
+                      <button
+                        onClick={() => handleShare(creation.id)}
+                        className='flex items-center gap-1 text-[11px] text-slate-500 hover:text-indigo-600 transition cursor-pointer'
+                        title='Share public link'
+                      >
+                        <Share2 className='w-3.5 h-3.5' />
+                        <span>Share</span>
+                      </button>
+
+                      {/* Open public showcase */}
+                      <a
+                        href={`/share/${creation.id}`}
+                        target='_blank'
+                        rel='noreferrer'
+                        className='flex items-center text-slate-400 hover:text-indigo-600 transition p-0.5'
+                        title='Open public showcase page'
+                      >
+                        <ExternalLink className='w-3.5 h-3.5' />
+                      </a>
+                    </div>
 
                     {/* Like button */}
                     <button
                       onClick={() => imageLikeToggle(creation.id)}
-                      className='flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 hover:bg-rose-50 hover:text-rose-600 transition cursor-pointer'
+                      className='flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-slate-50 hover:bg-rose-50 hover:text-rose-600 transition cursor-pointer shrink-0'
                     >
                       <Heart
                         className={`w-3.5 h-3.5 transition-transform active:scale-125 ${

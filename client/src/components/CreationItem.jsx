@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import Markdown from 'react-markdown'
+import MarkdownRenderer from './MarkdownRenderer'
 import {
   Trash2,
   Download,
@@ -14,13 +14,34 @@ import {
   Sparkles,
   ExternalLink,
   Calendar,
+  Wand2,
+  FileDown,
 } from 'lucide-react'
 import Swal from 'sweetalert2'
 import toast from 'react-hot-toast'
+import SmartPdfExportModal from './SmartPdfExportModal'
 
-const getTypeConfig = (type) => {
+const getTypeConfig = (type, prompt = '') => {
+  const lowerPrompt = (prompt || '').toLowerCase()
+
   switch (type) {
     case 'image':
+      if (lowerPrompt.includes('remove background') || lowerPrompt.includes('removed ') || lowerPrompt.includes('cleanup')) {
+        return {
+          label: 'Photo Cleanup',
+          icon: Wand2,
+          badgeBg: 'bg-rose-50 border-rose-200/80 text-rose-700',
+          gradient: 'from-rose-500 to-pink-600',
+        }
+      }
+      if (lowerPrompt.includes('cover art:')) {
+        return {
+          label: 'Cover Art',
+          icon: ImageIcon,
+          badgeBg: 'bg-indigo-50 border-indigo-200/80 text-indigo-700',
+          gradient: 'from-indigo-500 to-purple-600',
+        }
+      }
       return {
         label: 'AI Image',
         icon: ImageIcon,
@@ -87,7 +108,8 @@ const formatDate = (dateStr) => {
 const CreationItem = ({ item, onDelete }) => {
   const [expanded, setExpanded] = useState(false)
   const [copied, setCopied] = useState(false)
-  const config = getTypeConfig(item.type)
+  const [showPdfModal, setShowPdfModal] = useState(false)
+  const config = getTypeConfig(item.type, item.prompt)
   const IconComponent = config.icon
 
   const handleDownload = async (e) => {
@@ -159,11 +181,10 @@ const CreationItem = ({ item, onDelete }) => {
   return (
     <div
       onClick={() => setExpanded(!expanded)}
-      className={`p-4 sm:p-5 bg-white border rounded-2xl transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md ${
-        expanded
+      className={`p-4 sm:p-5 bg-white border rounded-2xl transition-all duration-200 cursor-pointer shadow-xs hover:shadow-md ${expanded
           ? 'border-indigo-200 ring-2 ring-indigo-500/10'
           : 'border-slate-200/80 hover:border-slate-300'
-      }`}
+        }`}
     >
       {/* Top Header Row */}
       <div className='flex items-center justify-between gap-3 flex-wrap'>
@@ -208,6 +229,21 @@ const CreationItem = ({ item, onDelete }) => {
               ) : (
                 <Clipboard className='w-4 h-4' />
               )}
+            </button>
+          )}
+
+          {/* Smart Content-Aware PDF Export Button */}
+          {item.type !== 'image' && (
+            <button
+              onClick={(e) => {
+                e.stopPropagation()
+                setShowPdfModal(true)
+              }}
+              title='Extract as Intelligent PDF'
+              className='p-2 rounded-xl text-slate-500 hover:text-rose-600 hover:bg-rose-50 transition border border-transparent hover:border-rose-100 cursor-pointer'
+              aria-label='Extract as PDF'
+            >
+              <FileDown className='w-4 h-4' />
             </button>
           )}
 
@@ -306,14 +342,25 @@ const CreationItem = ({ item, onDelete }) => {
                   {copied ? 'Copied' : 'Copy Text'}
                 </button>
               </div>
-              <div className='p-4 bg-slate-50 rounded-xl border border-slate-200/80 text-xs text-slate-700 leading-relaxed max-h-96 overflow-y-auto prose prose-slate prose-sm'>
-                <div className='reset-tw'>
-                  <Markdown>{item.content}</Markdown>
-                </div>
+              <div className='p-4 bg-slate-50 rounded-xl border border-slate-200/80 text-xs text-slate-700 leading-relaxed max-h-96 overflow-y-auto'>
+                <MarkdownRenderer content={item.content} />
               </div>
             </div>
           )}
         </div>
+      )}
+
+      {/* Smart Content-Aware PDF Exporter Modal */}
+      {item.type !== 'image' && (
+        <SmartPdfExportModal
+          isOpen={showPdfModal}
+          onClose={() => setShowPdfModal(false)}
+          title={item.prompt || `Visionary ${config.label}`}
+          content={item.content || ''}
+          meta={{
+            type: item.type,
+          }}
+        />
       )}
     </div>
   )

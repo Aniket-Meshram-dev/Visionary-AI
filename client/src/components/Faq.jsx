@@ -1,31 +1,10 @@
 import React, { useState } from 'react'
 import { ChevronDown, HelpCircle } from 'lucide-react'
+import { PRICING_CONFIG } from '../configs/pricing'
 
 const Faq = () => {
   const [openIndex, setOpenIndex] = useState(0)
-
-  const faqs = [
-    {
-      q: 'Is there a free plan available to try out?',
-      a: 'Yes, absolutely! Our Free plan provides instant access to AI Article Generation, Summarization, and Quick Code generation with free monthly credits. No credit card is required to sign up.',
-    },
-    {
-      q: 'Which AI models power Visionary AI?',
-      a: "We integrate Google Gemini's latest multi-modal LLMs for lightning-fast writing, analysis, and code synthesis, alongside Clipdrop's advanced diffusion engine for ultra-realistic image generation, background removal, and object replacement.",
-    },
-    {
-      q: 'Can I use the generated images and articles commercially?',
-      a: 'Yes! All content, images, and code snippets you generate are 100% yours with full commercial rights. You can use them for personal projects, client deliverables, YouTube thumbnails, blogs, and marketing campaigns.',
-    },
-    {
-      q: 'What is included in the Premium subscription?',
-      a: 'The Premium plan ($5/month billed annually) unlocks the entire tool suite including high-resolution AI Image Generation, Background & Object Removal, ATS Resume Reviewer, and priority queue processing.',
-    },
-    {
-      q: 'How does the Community Showcase work?',
-      a: 'When you create something amazing—like an anime render or a captivating article intro—you can publish it to the Community tab with one click. Other users can view, like, and get inspired by your prompts.',
-    },
-  ]
+  const faqs = PRICING_CONFIG.faqItems
 
   const toggleFaq = (index) => {
     setOpenIndex(openIndex === index ? -1 : index)
