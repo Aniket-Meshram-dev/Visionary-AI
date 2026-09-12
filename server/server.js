@@ -66,7 +66,15 @@ app.use(
 );
 
 // Render Health Check Endpoints
-app.get('/', (req, res) => res.send('Visionary.ai Server is Live with Supabase!'));
+app.get('/', (req, res) => {
+  res.status(200).json({
+    status: 'online',
+    message: '🚀 Visionary.ai API Engine is running smoothly!',
+    health: '/health',
+    version: '1.0.0',
+  });
+});
+
 app.get('/health', (req, res) => {
   res.status(200).json({
     status: 'ok',
