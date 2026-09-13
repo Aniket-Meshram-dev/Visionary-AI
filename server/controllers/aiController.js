@@ -7,6 +7,7 @@ import { v2 as cloudinary } from "cloudinary";
 import fs from 'fs'
 import dns from 'dns'
 import pdf from 'pdf-parse/lib/pdf-parse.js'
+import { extractTextFromPdf } from '../services/pdfExtractorService.js'
 import * as cheerio from 'cheerio'
 import { YoutubeTranscript } from 'youtube-transcript'
 
@@ -982,12 +983,10 @@ export const resumeReview = async (req, res) => {
             }
 
             const dataBuffer = fs.readFileSync(resume.path);
-            const pdfData = await pdf(dataBuffer);
+            extractedText = (await extractTextFromPdf(dataBuffer)) || "";
 
             // Clean up temp file immediately after reading
             if (resume?.path && fs.existsSync(resume.path)) fs.unlinkSync(resume.path);
-
-            extractedText = (pdfData?.text || "").trim();
         } else if (req.body.resume_text && typeof req.body.resume_text === 'string') {
             extractedText = req.body.resume_text.trim();
         }

@@ -1,6 +1,7 @@
 import fs from 'fs';
 import pdf from 'pdf-parse/lib/pdf-parse.js';
 import mammoth from 'mammoth';
+import { extractTextFromPdf } from '../services/pdfExtractorService.js';
 import { runChatCompletion } from './aiController.js';
 import { saveCreation } from '../services/creationService.js';
 import {
@@ -25,8 +26,7 @@ export const parseUploadedResume = async (req, res) => {
 
     if (ext === 'pdf') {
       const dataBuffer = fs.readFileSync(file.path);
-      const pdfData = await pdf(dataBuffer);
-      extractedText = (pdfData?.text || '').trim();
+      extractedText = (await extractTextFromPdf(dataBuffer)) || '';
     } else if (ext === 'docx') {
       const result = await mammoth.extractRawText({ path: file.path });
       extractedText = (result?.value || '').trim();

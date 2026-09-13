@@ -27,10 +27,10 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
   const isExecutive = template === 'executive';
 
   const fontFamily = isHarvard
-    ? "Georgia, 'Times New Roman', Times, serif"
+    ? "'Times New Roman', Times, Georgia, serif"
     : isExecutive
-    ? "'Segoe UI', Roboto, Helvetica, Arial, sans-serif"
-    : "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif";
+    ? "'Segoe UI', Arial, Helvetica, sans-serif"
+    : "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif";
 
   const primaryColor = isHarvard ? '#111827' : isExecutive ? '#0f172a' : '#4f46e5';
   const headingBorder = isHarvard ? '1px solid #1f2937' : isExecutive ? '1.5px solid #0f172a' : '1px solid #e2e8f0';
@@ -50,6 +50,9 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
 <head>
   <meta charset="UTF-8">
   <title>${personal.fullName || 'Candidate'} - Resume</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
     @page {
       size: A4 portrait;
