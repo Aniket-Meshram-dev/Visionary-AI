@@ -1,5 +1,179 @@
 [
   {
+    "id": "f7a23d30-a82b-4ddd-bc36-b83625dd4791",
+    "user_id": "1cc85ede-b682-4897-b705-6b9e6fe4f677",
+    "title": "ANIKET MESHRAM - Databse Engineer (Auto-Repaired)",
+    "target_role": "Databse Engineer",
+    "target_company": "Cognizant",
+    "job_description": "",
+    "jd_analysis": {},
+    "resume_data": {
+      "personal": {
+        "fullName": "ANIKET MESHRAM",
+        "title": "Database Engineer",
+        "email": "aniketmeshram445@gmail.com",
+        "phone": "+91 7028143749",
+        "location": "Maharashtra, India",
+        "linkedin": "",
+        "github": "",
+        "portfolio": ""
+      },
+      "summary": "Results‑oriented Database Engineer with deep expertise in PostgreSQL, MongoDB, and modern data architecture. Proven track record of designing scalable data pipelines, optimizing query performance, and integrating AI‑driven analytics to deliver measurable business impact. Passionate about leveraging data to solve complex problems and drive innovation.",
+      "skills": {
+        "languages": [
+          "JavaScript",
+          "TypeScript",
+          "Python"
+        ],
+        "frameworks": [
+          "React",
+          "Node.js"
+        ],
+        "cloud_devops": [
+          "Docker",
+          "AWS"
+        ],
+        "databases": [
+          "PostgreSQL",
+          "MongoDB"
+        ],
+        "tools": [
+          "Git",
+          "REST APIs",
+          "SQL",
+          "NoSQL",
+          "ETL",
+          "Data Modeling",
+          "Performance Tuning"
+        ]
+      },
+      "experience": [
+        {
+          "id": "exp_1",
+          "role": "Full Stack Developer",
+          "company": "",
+          "location": "Maharashtra, India",
+          "startDate": "",
+          "endDate": "Present",
+          "bullets": [
+            "Accomplished real‑time market tracking and AI‑based portfolio health analysis, as measured by increased user engagement, by developing and integrating data‑driven features using PostgreSQL, Drizzle ORM, and Gemini API.",
+            "Accomplished secure and scalable backend architecture, as measured by improved transaction throughput and payment‑gateway reliability, by implementing REST APIs, JWT authentication, and Stripe/Razorpay processors."
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "proj_1",
+          "title": "CoinNova – Advanced Cryptocurrency Trading Platform",
+          "techStack": [
+            "React",
+            "Node.js",
+            "Express",
+            "PostgreSQL",
+            "Drizzle ORM"
+          ],
+          "liveUrl": "",
+          "githubUrl": "",
+          "bullets": [
+            "Architected a full‑stack cryptocurrency management platform with real‑time market tracking via CoinGecko API, as measured by higher user retention and engagement.",
+            "Developed secure wallet balance updates and transaction handling via Drizzle ORM, as measured by ACID‑compliant data integrity and low‑latency operations."
+          ]
+        },
+        {
+          "id": "proj_2",
+          "title": "QuickAI – Full‑Stack AI SaaS Platform",
+          "techStack": [
+            "React",
+            "Node.js",
+            "Express",
+            "PostgreSQL",
+            "Gemini API"
+          ],
+          "liveUrl": "",
+          "githubUrl": "",
+          "bullets": [
+            "Engineered an AI‑powered SaaS platform offering content generation and image‑processing tools, as measured by increased user productivity and subscription conversions.",
+            "Implemented robust authentication and premium‑subscription workflow with Clerk, as measured by safeguarded data access and supported recurring revenue streams."
+          ]
+        },
+        {
+          "id": "proj_3",
+          "title": "ICM SYSTEM – Intelligent Course Management System",
+          "techStack": [
+            "Next.js",
+            "React",
+            "Prisma ORM",
+            "PostgreSQL"
+          ],
+          "liveUrl": "",
+          "githubUrl": "",
+          "bullets": [
+            "Created an AI‑driven educational platform generating personalized learning roadmaps, as measured by boosted student engagement and completion rates.",
+            "Integrated Monaco Editor for real‑time coding practice and AI‑assisted feedback, as measured by enhanced learning experience for thousands of users."
+          ]
+        }
+      ],
+      "education": [
+        {
+          "id": "edu_1",
+          "degree": "B.Tech in Computer Science and Business Systems (CSBS)",
+          "institution": "",
+          "year": "",
+          "grade": ""
+        }
+      ],
+      "certifications": [
+        {
+          "name": "Coursera Certification in Software Development",
+          "issuer": "Coursera",
+          "year": ""
+        },
+        {
+          "name": "Coursera Certification in Data Structures and Algorithms",
+          "issuer": "Coursera",
+          "year": ""
+        }
+      ],
+      "achievements": []
+    },
+    "ats_score": 85,
+    "ats_breakdown": {
+      "ats_compatibility_score": 85,
+      "resume_quality_score": 80,
+      "job_match_score": 78,
+      "breakdown": {
+        "keyword_match_score": 88,
+        "quantifiable_impact_score": 70,
+        "action_verb_score": 85,
+        "formatting_score": 90
+      },
+      "matched_keywords": [
+        "PostgreSQL",
+        "MongoDB",
+        "SQL",
+        "NoSQL",
+        "ETL",
+        "Data Modeling",
+        "Performance Tuning",
+        "REST APIs",
+        "Git",
+        "Docker",
+        "AWS"
+      ],
+      "missing_verified_skills": [],
+      "fixes_applied": [
+        "Rewrote bullets using XYZ formula",
+        "Added qualitative impact statements where metrics were missing",
+        "Incorporated database‑engineering keywords",
+        "Standardized ATS‑friendly formatting"
+      ]
+    },
+    "template_id": "tech_modern",
+    "is_one_page": true,
+    "created_at": "2026-09-13T07:32:40.751Z",
+    "updated_at": "2026-09-13T07:32:40.751Z"
+  },
+  {
     "id": "ce6c15d1-6650-4f23-b899-467365a89aba",
     "user_id": "1cc85ede-b682-4897-b705-6b9e6fe4f677",
     "title": "Aniket Meshram - Databse Engineer (Auto-Repaired)",
