@@ -17,6 +17,7 @@ import {
   Wand2,
   Layers,
   Settings,
+  X,
 } from 'lucide-react'
 import React from 'react'
 import { NavLink, useNavigate } from 'react-router-dom'
@@ -52,15 +53,34 @@ const Sidebar = ({ sidebar, setSidebar }) => {
       {sidebar && (
         <div
           onClick={() => setSidebar(false)}
-          className='fixed inset-0 bg-slate-900/40 backdrop-blur-xs z-30 sm:hidden transition-opacity'
+          className='fixed inset-0 bg-slate-950/50 backdrop-blur-xs z-40 md:hidden transition-opacity duration-300'
         />
       )}
 
       <aside
-        className={`w-64 bg-white border-r border-slate-200/80 flex flex-col justify-between shrink-0 z-40 transition-all duration-300 ease-in-out max-sm:fixed max-sm:top-16 max-sm:bottom-0 ${
-          sidebar ? 'max-sm:translate-x-0' : 'max-sm:-translate-x-full'
+        className={`w-72 sm:w-64 max-w-[85vw] bg-white border-r border-slate-200/80 flex flex-col justify-between shrink-0 transition-all duration-300 ease-in-out z-50 max-md:fixed max-md:inset-y-0 max-md:left-0 max-md:shadow-2xl md:relative md:translate-x-0 ${
+          sidebar ? 'max-md:translate-x-0' : 'max-md:-translate-x-full'
         }`}
       >
+        {/* Mobile Header (Visible only on mobile drawer < 768px) */}
+        <div className='md:hidden flex items-center justify-between px-4 py-3 border-b border-slate-200/80 bg-slate-50/80'>
+          <img
+            src={assets.logo}
+            alt='Visionary.ai'
+            className='h-6 object-contain cursor-pointer'
+            onClick={() => {
+              setSidebar(false);
+              navigate('/');
+            }}
+          />
+          <button
+            onClick={() => setSidebar(false)}
+            className='p-1.5 rounded-lg text-slate-500 hover:text-slate-800 hover:bg-slate-200/70 transition cursor-pointer'
+            aria-label='Close Sidebar'
+          >
+            <X className='w-5 h-5' />
+          </button>
+        </div>
         {/* Navigation list */}
         <div className='flex-1 overflow-y-auto px-3 py-4 space-y-6'>
           {/* User quick pill */}

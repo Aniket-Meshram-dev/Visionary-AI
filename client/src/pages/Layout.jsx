@@ -107,7 +107,7 @@ const Layout = () => {
         <div className='flex items-center gap-3'>
           <button
             onClick={() => setSidebar(!sidebar)}
-            className='p-2 -ml-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 sm:hidden cursor-pointer'
+            className='p-2 -ml-2 rounded-lg text-gray-600 hover:text-gray-900 hover:bg-gray-100 md:hidden cursor-pointer'
             aria-label='Toggle Sidebar'
           >
             {sidebar ? <X className='w-5 h-5' /> : <Menu className='w-5 h-5' />}
@@ -152,7 +152,7 @@ const Layout = () => {
       </div>
 
       {/* Docked Mobile Bottom Navigation (< 768px) */}
-      <MobileBottomNav onOpenSidebar={() => setSidebar(true)} />
+      <MobileBottomNav onOpenSidebar={() => setSidebar(true)} isSidebarOpen={sidebar} />
 
       {/* In-App PWA Install Prompt Banner */}
       <InstallPwaBanner />

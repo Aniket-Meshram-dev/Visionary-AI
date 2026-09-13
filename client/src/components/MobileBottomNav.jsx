@@ -17,7 +17,7 @@ import {
   Settings,
 } from 'lucide-react'
 
-export const MobileBottomNav = ({ onOpenSidebar }) => {
+export const MobileBottomNav = ({ onOpenSidebar, isSidebarOpen }) => {
   const [showToolsSheet, setShowToolsSheet] = useState(false)
   const location = useLocation()
   const navigate = useNavigate()
@@ -134,7 +134,9 @@ export const MobileBottomNav = ({ onOpenSidebar }) => {
       {/* 2. Docked Bottom Navigation Bar (Visible on mobile/phablet < 768px) */}
       <nav
         aria-label="Mobile Navigation"
-        className='fixed bottom-0 left-0 right-0 z-30 md:hidden bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-lg shadow-slate-900/5 px-2 pb-[env(safe-area-inset-bottom,0px)]'
+        className={`fixed bottom-0 left-0 right-0 z-30 md:hidden bg-white/95 backdrop-blur-xl border-t border-slate-200/90 shadow-lg shadow-slate-900/5 px-2 pb-[env(safe-area-inset-bottom,0px)] transition-all duration-300 ease-in-out ${
+          isSidebarOpen ? 'translate-y-full opacity-0 pointer-events-none' : 'translate-y-0 opacity-100'
+        }`}
       >
         <div className='flex items-center justify-around h-14'>
           {navButtons.map(({ to, label, Icon, end }) => (

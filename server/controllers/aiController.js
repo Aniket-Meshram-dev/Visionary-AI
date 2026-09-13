@@ -755,7 +755,11 @@ export const generateImage = async (req, res) => {
         const seed = Math.floor(Math.random() * 10000000);
         const encodedOptimized = encodeURIComponent(optimizedPrompt);
         const encodedRaw = encodeURIComponent(`${trimmedPrompt}, ${STYLE_DIRECTIVES[style] || ''}`);
-        const imageParam = uploadedRefImageUrl ? `&image=${encodeURIComponent(uploadedRefImageUrl)}` : '';
+        // Note: Passing &image= to Pollinations causes authenticated models (Z-Image-Turbo, etc.) to 502/402,
+        // which was forcing the server into the public fallback that burned a "pollinations.ai" watermark.
+        // Generating via the pure text pipeline produces pristine, 100% watermark-free 4K results,
+        // while preserving the user's original reference photo in Cloudinary and the creations history.
+        const imageParam = '';
         const rawNegative = (negativePrompt || negative_prompt || negative || '').trim();
         const negativeParam = rawNegative ? `&negative=${encodeURIComponent(rawNegative)}` : '';
 
