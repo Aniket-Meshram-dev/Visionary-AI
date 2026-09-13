@@ -1,5 +1,196 @@
 [
   {
+    "id": "ce6c15d1-6650-4f23-b899-467365a89aba",
+    "user_id": "1cc85ede-b682-4897-b705-6b9e6fe4f677",
+    "title": "Aniket Meshram - Databse Engineer (Auto-Repaired)",
+    "target_role": "Databse Engineer",
+    "target_company": "Cognizant",
+    "job_description": "",
+    "jd_analysis": {},
+    "resume_data": {
+      "personal": {
+        "fullName": "Aniket Meshram",
+        "title": "Database Engineer",
+        "email": "aniketmeshram445@gmail.com",
+        "phone": "+91 7028143749",
+        "location": "Maharashtra, India",
+        "linkedin": "https://linkedin.com/in/aniketmeshram",
+        "github": "",
+        "portfolio": ""
+      },
+      "summary": "Entry‑level Database Engineer with hands‑on experience in PostgreSQL, MongoDB, and modern ORMs, delivering scalable data solutions and AI‑powered applications. Adept at designing data pipelines, optimizing query performance, and integrating cloud services to support high‑traffic SaaS platforms. Passionate about leveraging data engineering to drive product innovation and user engagement.",
+      "skills": {
+        "languages": [
+          "JavaScript",
+          "TypeScript",
+          "Python",
+          "Java",
+          "C++"
+        ],
+        "frameworks": [
+          "React",
+          "Node.js",
+          "Express",
+          "Next.js"
+        ],
+        "cloud_devops": [
+          "Docker",
+          "AWS"
+        ],
+        "databases": [
+          "PostgreSQL",
+          "MongoDB",
+          "MySQL",
+          "Redis"
+        ],
+        "tools": [
+          "Git",
+          "REST APIs",
+          "GraphQL",
+          "CI/CD"
+        ]
+      },
+      "experience": [
+        {
+          "id": "exp_1",
+          "role": "Full Stack Developer",
+          "company": "Freelance",
+          "location": "Maharashtra, India",
+          "startDate": "2023",
+          "endDate": "Present",
+          "bullets": [
+            "Accomplished real‑time market tracking and AI‑based portfolio health analysis, measured by increased user engagement, by integrating PostgreSQL, Drizzle ORM, and Gemini API to deliver data‑driven insights.",
+            "Engineered secure and scalable backend systems, resulting in improved transaction throughput, by implementing REST APIs, JWT authentication, and Stripe/Razorpay payment processors."
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "proj_1",
+          "title": "CoinNova – Advanced Cryptocurrency Trading Platform",
+          "techStack": [
+            "React",
+            "Node.js",
+            "Express",
+            "PostgreSQL",
+            "Drizzle ORM",
+            "CoinGecko API"
+          ],
+          "liveUrl": "",
+          "githubUrl": "",
+          "bullets": [
+            "Architected a full‑stack cryptocurrency management platform with real‑time market tracking, boosting user retention and engagement.",
+            "Developed secure wallet balance updates and transaction handling via Drizzle ORM, ensuring ACID‑compliant data integrity and low‑latency operations."
+          ]
+        },
+        {
+          "id": "proj_2",
+          "title": "QuickAI – Full‑Stack AI SaaS Platform",
+          "techStack": [
+            "React",
+            "Node.js",
+            "Express",
+            "PostgreSQL",
+            "Gemini API",
+            "Clerk"
+          ],
+          "liveUrl": "",
+          "githubUrl": "",
+          "bullets": [
+            "Engineered an AI‑powered SaaS platform offering content generation and image‑processing tools, driving increased user productivity and subscription conversions.",
+            "Implemented robust authentication and premium‑subscription workflow with Clerk, safeguarding data access and supporting recurring revenue streams."
+          ]
+        },
+        {
+          "id": "proj_3",
+          "title": "ICM SYSTEM – Intelligent Course Management System",
+          "techStack": [
+            "Next.js",
+            "React",
+            "Prisma ORM",
+            "PostgreSQL",
+            "Monaco Editor"
+          ],
+          "liveUrl": "",
+          "githubUrl": "",
+          "bullets": [
+            "Created an AI‑driven educational platform that generates personalized learning roadmaps, boosting student engagement and completion rates.",
+            "Integrated Monaco Editor for real‑time coding practice and AI‑assisted feedback, enhancing the learning experience for thousands of users."
+          ]
+        }
+      ],
+      "education": [
+        {
+          "id": "edu_1",
+          "degree": "B.Tech in Computer Science and Business Systems (CSBS)",
+          "institution": "",
+          "year": "",
+          "grade": ""
+        }
+      ],
+      "certifications": [
+        {
+          "id": "cert_1",
+          "name": "Coursera Certification in Software Development",
+          "issuer": "Coursera",
+          "year": ""
+        },
+        {
+          "id": "cert_2",
+          "name": "Coursera Certification in Data Structures and Algorithms",
+          "issuer": "Coursera",
+          "year": ""
+        }
+      ],
+      "achievements": []
+    },
+    "ats_score": 90,
+    "ats_breakdown": {
+      "ats_compatibility_score": 90,
+      "resume_quality_score": 80,
+      "job_match_score": 85,
+      "breakdown": {
+        "keyword_match_score": 90,
+        "quantifiable_impact_score": 70,
+        "action_verb_score": 90,
+        "formatting_score": 95
+      },
+      "matched_keywords": [
+        "PostgreSQL",
+        "MongoDB",
+        "SQL",
+        "NoSQL",
+        "ETL",
+        "Data Warehouse",
+        "AWS",
+        "Docker",
+        "REST APIs",
+        "GraphQL",
+        "Data Modeling",
+        "Performance Tuning",
+        "Replication",
+        "Backup",
+        "Recovery",
+        "Data Pipeline",
+        "Data Ingestion",
+        "Data Transformation",
+        "Data Quality",
+        "Data Governance"
+      ],
+      "missing_verified_skills": [],
+      "fixes_applied": [
+        "Rewrote all bullet points using the XYZ formula to emphasize impact and action.",
+        "Integrated missing database and data‑engineering keywords (ETL, data warehouse, cloud services).",
+        "Standardized section hierarchy and removed non‑ATS friendly elements.",
+        "Added quantified impact where available and strengthened qualitative statements with decisive verbs."
+      ]
+    },
+    "template_id": "tech_modern",
+    "is_one_page": true,
+    "created_at": "2026-09-13T07:31:14.383Z",
+    "updated_at": "2026-09-13T07:31:14.383Z"
+  },
+  {
     "id": "818792cf-1b53-4a3f-b11f-e6b3059a829a",
     "user_id": "anonymous",
     "title": "John Doe - Full Stack Developer (Auto-Repaired)",

@@ -9,6 +9,7 @@ import dns from 'dns'
 import pdf from 'pdf-parse/lib/pdf-parse.js'
 import { extractTextFromPdf } from '../services/pdfExtractorService.js'
 import * as cheerio from 'cheerio'
+import mammoth from 'mammoth'
 import { YoutubeTranscript } from 'youtube-transcript'
 
 const AI = new OpenAI({
@@ -982,8 +983,16 @@ export const resumeReview = async (req, res) => {
                 return res.json({ success: false, message: "Resume file size exceeds allowed size (5MB)." });
             }
 
-            const dataBuffer = fs.readFileSync(resume.path);
-            extractedText = (await extractTextFromPdf(dataBuffer)) || "";
+            const ext = (resume.originalname?.split('.').pop() || '').toLowerCase();
+            if (ext === 'docx') {
+                const result = await mammoth.extractRawText({ path: resume.path });
+                extractedText = (result?.value || '').trim();
+            } else if (['txt', 'md'].includes(ext)) {
+                extractedText = fs.readFileSync(resume.path, 'utf8').trim();
+            } else {
+                const dataBuffer = fs.readFileSync(resume.path);
+                extractedText = (await extractTextFromPdf(dataBuffer)) || "";
+            }
 
             // Clean up temp file immediately after reading
             if (resume?.path && fs.existsSync(resume.path)) fs.unlinkSync(resume.path);
