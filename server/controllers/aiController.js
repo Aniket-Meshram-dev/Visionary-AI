@@ -703,7 +703,7 @@ export const enhanceImagePrompt = async (req, res) => {
 export const generateImage = async (req, res) => {
     try {
         const userId = req.userId || req.auth?.()?.userId;
-        const { prompt, style = 'Photorealistic', aspectRatio = '1:1', publish } = req.body;
+        const { prompt, style = 'Photorealistic', aspectRatio = '1:1', publish, negativePrompt, negative_prompt, negative } = req.body;
         const plan = req.plan;
         const free_usage = req.free_usage;
 
@@ -756,6 +756,8 @@ export const generateImage = async (req, res) => {
         const encodedOptimized = encodeURIComponent(optimizedPrompt);
         const encodedRaw = encodeURIComponent(`${trimmedPrompt}, ${STYLE_DIRECTIVES[style] || ''}`);
         const imageParam = uploadedRefImageUrl ? `&image=${encodeURIComponent(uploadedRefImageUrl)}` : '';
+        const rawNegative = (negativePrompt || negative_prompt || negative || '').trim();
+        const negativeParam = rawNegative ? `&negative=${encodeURIComponent(rawNegative)}` : '';
 
         // Model priority
         const authenticatedModels = [
