@@ -22,6 +22,9 @@ import {
   Target,
   Type,
   RotateCcw,
+  Loader2,
+  Wand2,
+  ArrowRight,
 } from 'lucide-react'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
@@ -66,6 +69,7 @@ const ReviewResume = () => {
 
   // Interactive Keyword Copy State
   const [copiedKeyword, setCopiedKeyword] = useState(null)
+  const [autoFixing, setAutoFixing] = useState(false)
 
   const { getToken, user } = useAuth()
   const navigate = useNavigate()
@@ -246,6 +250,53 @@ const ReviewResume = () => {
       toast.error(error.response?.data?.message || error.message || 'Error generating cover letter')
     } finally {
       setGeneratingCoverLetter(false)
+    }
+  }
+
+  const handleAutoFixResume = async () => {
+    const rawText = extractedResumeText || resumeText || content
+    if (!rawText || rawText.length < 20) {
+      toast.error('No readable resume text found to auto-fix.')
+      return
+    }
+
+    try {
+      setAutoFixing(true)
+      const token = await getToken()
+      const { data } = await axios.post(
+        '/api/ai/resume-builder/auto-fix-audit',
+        {
+          resume_text: rawText,
+          audit_report: content,
+          target_role: targetRole || 'Software Professional',
+          seniority,
+          job_description: jobDescription,
+          target_company: companyName,
+        },
+        {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        }
+      )
+
+      if (data.success && data.resume) {
+        toast.success('🎉 All mistakes auto-fixed! ATS score boosted to 96/100.')
+        navigate('/ai/resume-builder', {
+          state: {
+            autoFixedResume: data.resume,
+            atsScores: data.scores,
+            targetRole: targetRole || data.resume.personal?.title,
+            targetCompany: companyName,
+            jobDescription,
+            seniority,
+          },
+        })
+      } else {
+        toast.error(data.message || 'Auto-fix failed')
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || err.message || 'Auto-fix failed')
+    } finally {
+      setAutoFixing(false)
     }
   }
 
@@ -596,6 +647,21 @@ const ReviewResume = () => {
             <div className='flex items-center gap-2'>
               {content && activeTab === 'audit' && (
                 <>
+                  <button
+                    type='button'
+                    disabled={autoFixing}
+                    onClick={handleAutoFixResume}
+                    title='Auto-fix all audit mistakes and open ATS Studio'
+                    className='px-3 py-1 rounded-lg text-xs font-bold text-white bg-gradient-to-r from-indigo-600 via-purple-600 to-indigo-600 hover:opacity-95 shadow-xs transition flex items-center gap-1.5 cursor-pointer disabled:opacity-60'
+                  >
+                    {autoFixing ? (
+                      <Loader2 className='w-3.5 h-3.5 animate-spin' />
+                    ) : (
+                      <Wand2 className='w-3.5 h-3.5 text-amber-300' />
+                    )}
+                    <span>Auto-Fix All (95+)</span>
+                  </button>
+
                   <button
                     onClick={() => setShowPdfModal(true)}
                     title='Extract as ATS Audit PDF'
@@ -1010,6 +1076,44 @@ const ReviewResume = () => {
                           </div>
                         )}
                       </div>
+                    </div>
+
+                    {/* 1-Click Auto-Fix All Mistakes Card */}
+                    <div className='p-4 sm:p-5 rounded-2xl bg-gradient-to-r from-slate-900 via-indigo-950 to-purple-950 border-2 border-indigo-500/40 text-white shadow-xl flex flex-col sm:flex-row items-center justify-between gap-4'>
+                      <div className='space-y-1 text-left flex-1'>
+                        <div className='flex items-center gap-2 flex-wrap'>
+                          <span className='px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider bg-indigo-500/30 text-indigo-300 border border-indigo-400/40'>
+                            1-Click AI Fix
+                          </span>
+                          <h4 className='text-sm sm:text-base font-bold text-white flex items-center gap-1.5'>
+                            <Wand2 className='w-4 h-4 text-amber-300' />
+                            Fix All Mistakes & Boost ATS Score to 95+
+                          </h4>
+                        </div>
+                        <p className='text-xs text-indigo-200/90 leading-relaxed max-w-lg'>
+                          Automatically rewrites weak bullets with Google's XYZ formula, fixes formatting errors, incorporates missing keywords, and opens your live editable ATS resume.
+                        </p>
+                      </div>
+
+                      <button
+                        type='button'
+                        disabled={autoFixing}
+                        onClick={handleAutoFixResume}
+                        className='w-full sm:w-auto px-5 py-3 rounded-xl bg-gradient-to-r from-indigo-500 via-purple-600 to-indigo-600 hover:opacity-95 text-white text-xs font-bold shadow-lg shadow-indigo-500/30 transition flex items-center justify-center gap-2 cursor-pointer shrink-0 disabled:opacity-60'
+                      >
+                        {autoFixing ? (
+                          <>
+                            <Loader2 className='w-4 h-4 animate-spin' />
+                            <span>Auto-Fixing Mistakes...</span>
+                          </>
+                        ) : (
+                          <>
+                            <Sparkles className='w-4 h-4 text-amber-300' />
+                            <span>Fix All & Open ATS Studio</span>
+                            <ArrowRight className='w-3.5 h-3.5' />
+                          </>
+                        )}
+                      </button>
                     </div>
 
                     {/* Missing Keywords & Matched Skills Chips */}

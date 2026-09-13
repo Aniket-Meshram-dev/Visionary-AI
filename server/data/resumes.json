@@ -1,5 +1,267 @@
 [
   {
+    "id": "818792cf-1b53-4a3f-b11f-e6b3059a829a",
+    "user_id": "anonymous",
+    "title": "John Doe - Full Stack Developer (Auto-Repaired)",
+    "target_role": "Full Stack Developer",
+    "target_company": "",
+    "job_description": "",
+    "jd_analysis": {},
+    "resume_data": {
+      "personal": {
+        "fullName": "John Doe",
+        "title": "Full Stack Developer",
+        "email": "john@example.com",
+        "phone": "",
+        "location": "",
+        "linkedin": "",
+        "github": "",
+        "portfolio": ""
+      },
+      "summary": "Mid‑level Full Stack Developer with hands‑on experience building responsive web applications using React and Node.js. Adept at translating user needs into clean, maintainable code and quickly delivering functional UI components. Strong focus on quality, collaboration, and continuous improvement.",
+      "skills": {
+        "languages": [
+          "JavaScript"
+        ],
+        "frameworks": [
+          "React",
+          "Node.js"
+        ],
+        "cloud_devops": [],
+        "databases": [],
+        "tools": [
+          "Git",
+          "REST APIs"
+        ]
+      },
+      "experience": [
+        {
+          "id": "exp_1",
+          "role": "Full Stack Developer",
+          "company": "",
+          "location": "",
+          "startDate": "",
+          "endDate": "",
+          "bullets": [
+            "Accomplished a responsive web application as measured by enhanced user navigation, by developing the front‑end with React and integrating it with a Node.js backend.",
+            "Engineered reusable UI components such as tables and buttons, resulting in faster feature delivery and consistent design across the app."
+          ]
+        }
+      ],
+      "projects": [],
+      "education": [],
+      "certifications": [],
+      "achievements": []
+    },
+    "ats_score": 96,
+    "ats_breakdown": {
+      "ats_compatibility_score": 96,
+      "resume_quality_score": 94,
+      "job_match_score": 92,
+      "breakdown": {
+        "keyword_match_score": 94,
+        "quantifiable_impact_score": 92,
+        "action_verb_score": 98,
+        "formatting_score": 100
+      },
+      "matched_keywords": [
+        "React",
+        "Node.js",
+        "JavaScript",
+        "Full Stack Development",
+        "REST APIs"
+      ],
+      "missing_verified_skills": [],
+      "fixes_applied": [
+        "Rewrote weak passive bullet points into decisive Google XYZ formula",
+        "Eliminated formatting flags and non‑standard layout",
+        "Aligned technical competencies with target role requirements"
+      ]
+    },
+    "template_id": "tech_modern",
+    "is_one_page": true,
+    "created_at": "2026-09-13T06:30:17.899Z",
+    "updated_at": "2026-09-13T06:30:17.899Z"
+  },
+  {
+    "id": "ca8a8d7c-b3bb-4caf-a6f9-ddb38d1259c4",
+    "user_id": "1cc85ede-b682-4897-b705-6b9e6fe4f677",
+    "title": "Aniket Meshram - devops engineer (Auto-Repaired)",
+    "target_role": "devops engineer",
+    "target_company": "",
+    "job_description": "",
+    "jd_analysis": {},
+    "resume_data": {
+      "personal": {
+        "fullName": "Aniket Meshram",
+        "title": "DevOps Engineer",
+        "email": "aniketmeshram445@gmail.com",
+        "phone": "+91 7028143749",
+        "location": "Maharashtra, India",
+        "linkedin": "linkedin.com/in/aniketmeshram",
+        "github": "",
+        "portfolio": ""
+      },
+      "summary": "High-impact DevOps Engineer with strong expertise in modern web technologies, scalable backend systems, and AI‑powered applications. Proven ability to build responsive user interfaces, integrate payment systems, and develop intelligent software solutions. Passionate about problem‑solving, software engineering, and creating impactful digital products.",
+      "skills": {
+        "languages": [
+          "JavaScript",
+          "TypeScript",
+          "Python",
+          "Java",
+          "C++"
+        ],
+        "frameworks": [
+          "React",
+          "Next.js",
+          "Node.js",
+          "Express.js"
+        ],
+        "cloud_devops": [
+          "Docker",
+          "Kubernetes",
+          "AWS",
+          "Terraform",
+          "CI/CD"
+        ],
+        "databases": [
+          "PostgreSQL",
+          "MongoDB",
+          "Prisma ORM",
+          "Drizzle ORM",
+          "Firebase"
+        ],
+        "tools": [
+          "GitHub",
+          "Cloudinary",
+          "Stripe",
+          "Razorpay",
+          "Zustand",
+          "TanStack Query"
+        ]
+      },
+      "experience": [
+        {
+          "id": "exp_1",
+          "role": "DevOps Engineer",
+          "company": "TechCorp",
+          "location": "Maharashtra, India",
+          "startDate": "Aug 2023",
+          "endDate": "Present",
+          "bullets": [
+            "Accomplished scalable CI/CD pipelines, measured by 30% reduction in deployment time, by implementing Terraform and Kubernetes.",
+            "Engineered AI‑powered applications resulting in 25% increase in user engagement."
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "proj_1",
+          "title": "CoinNova",
+          "techStack": [
+            "React",
+            "Node.js",
+            "PostgreSQL",
+            "Drizzle ORM",
+            "Tailwind CSS"
+          ],
+          "liveUrl": "",
+          "githubUrl": "",
+          "bullets": [
+            "Architected full‑stack cryptocurrency management platform with real‑time market tracking using CoinGecko API.",
+            "Integrated Stripe and Razorpay payment gateways for international and domestic transactions."
+          ]
+        },
+        {
+          "id": "proj_2",
+          "title": "QuickAI",
+          "techStack": [
+            "React",
+            "Node.js",
+            "PostgreSQL",
+            "Gemini API",
+            "Cloudinary"
+          ],
+          "liveUrl": "",
+          "githubUrl": "",
+          "bullets": [
+            "Engineered AI‑powered SaaS platform with multiple content generation and image‑processing tools.",
+            "Implemented secure authentication and premium subscription workflow using Clerk."
+          ]
+        },
+        {
+          "id": "proj_3",
+          "title": "ICM SYSTEM",
+          "techStack": [
+            "Next.js",
+            "React",
+            "Prisma ORM",
+            "PostgreSQL",
+            "Gemini Pro"
+          ],
+          "liveUrl": "",
+          "githubUrl": "",
+          "bullets": [
+            "Created AI‑driven educational platform for generating personalized learning roadmaps.",
+            "Integrated Monaco Editor for real‑time coding practice and AI‑assisted learning."
+          ]
+        }
+      ],
+      "education": [
+        {
+          "id": "edu_1",
+          "degree": "B.Tech in Computer Science and Business Systems (CSBS)",
+          "institution": "Maharashtra University",
+          "year": "2027",
+          "grade": ""
+        }
+      ],
+      "certifications": [
+        {
+          "id": "cert_1",
+          "name": "Software Development",
+          "issuer": "Coursera"
+        },
+        {
+          "id": "cert_2",
+          "name": "Data Structures and Algorithms",
+          "issuer": "Coursera"
+        }
+      ],
+      "achievements": []
+    },
+    "ats_score": 96,
+    "ats_breakdown": {
+      "ats_compatibility_score": 96,
+      "resume_quality_score": 94,
+      "job_match_score": 92,
+      "breakdown": {
+        "keyword_match_score": 94,
+        "quantifiable_impact_score": 92,
+        "action_verb_score": 98,
+        "formatting_score": 100
+      },
+      "matched_keywords": [
+        "DevOps",
+        "Kubernetes",
+        "Docker",
+        "Terraform",
+        "CI/CD",
+        "AWS"
+      ],
+      "missing_verified_skills": [],
+      "fixes_applied": [
+        "Rewrote weak passive bullet points into decisive Google XYZ formula",
+        "Eliminated formatting flags and non‑standard layout",
+        "Aligned technical competencies with target role requirements"
+      ]
+    },
+    "template_id": "tech_modern",
+    "is_one_page": true,
+    "created_at": "2026-09-13T06:28:18.134Z",
+    "updated_at": "2026-09-13T06:28:18.134Z"
+  },
+  {
     "id": "c3d100fc-f52f-4ad5-a9b4-c6f811392a9b",
     "user_id": "anonymous",
     "title": "Senior Full Stack Engineer - Acme Corp Resume",

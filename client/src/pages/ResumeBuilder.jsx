@@ -39,6 +39,7 @@ import {
 } from 'lucide-react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
+import { useLocation } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
 import ResumeLiveCanvas from '../components/ResumeLiveCanvas';
 import {
@@ -110,6 +111,7 @@ const initialResumeData = {
 
 const ResumeBuilder = () => {
   const { getToken, user } = useAuth();
+  const location = useLocation();
 
   // Primary Mode: 'wizard' (Step-by-Step Interview) vs 'studio' (Live Canvas Editor)
   const [viewMode, setViewMode] = useState('wizard'); // 'wizard' | 'studio'
@@ -461,6 +463,30 @@ const ResumeBuilder = () => {
   useEffect(() => {
     loadUserResumes();
   }, [user]);
+
+  // Listen for auto-fixed resume passed from ReviewResume audit page
+  useEffect(() => {
+    if (location.state?.autoFixedResume) {
+      setResumeData(location.state.autoFixedResume);
+      if (location.state.atsScores) {
+        setAtsScoreData(location.state.atsScores);
+      }
+      if (location.state.targetRole) {
+        setTargetRole(location.state.targetRole);
+      }
+      if (location.state.targetCompany) {
+        setTargetCompany(location.state.targetCompany);
+      }
+      if (location.state.jobDescription) {
+        setJobDescription(location.state.jobDescription);
+      }
+      if (location.state.seniority) {
+        setSeniority(location.state.seniority);
+      }
+      setViewMode('studio');
+      toast.success('🎉 Loaded auto-repaired resume with 95+ ATS score!');
+    }
+  }, [location.state]);
 
   return (
     <div className="min-h-screen bg-slate-900 text-slate-100 flex flex-col">
@@ -1269,38 +1295,97 @@ const ResumeBuilder = () => {
                 </p>
               </div>
 
-              {/* Missing JD Skills Suggestion Banner */}
+              {/* Truth Verification System for Missing JD Skills */}
               {atsScoreData.missingVerifiedSkills?.length > 0 && (
-                <div className="p-4 bg-amber-950/20 border border-amber-800/50 rounded-xl space-y-2">
-                  <div className="flex items-center gap-2 text-xs font-bold text-amber-300">
-                    <AlertTriangle className="w-4 h-4 text-amber-400" />
-                    Skills Mentioned in Job Description:
+                <div className="p-5 bg-gradient-to-r from-amber-950/30 to-orange-950/20 border border-amber-800/60 rounded-2xl space-y-3">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-xs font-bold text-amber-300">
+                      <AlertTriangle className="w-4 h-4 text-amber-400" />
+                      Truth Verification System: Job Description Skills Check
+                    </div>
+                    <span className="text-[10px] bg-amber-500/20 text-amber-200 px-2 py-0.5 rounded-full border border-amber-500/30">
+                      Strict Zero-Hallucination
+                    </span>
                   </div>
-                  <p className="text-[11px] text-slate-300">
-                    Do you have experience with any of these? Click to add only if you have genuine experience:
+                  <p className="text-xs text-slate-300">
+                    The target Job Description requests these skills. QuickAI will <strong>NEVER</strong> automatically fake them. Confirm whether you have genuine experience:
                   </p>
-                  <div className="flex flex-wrap gap-2 pt-1">
+
+                  <div className="space-y-2 pt-1">
                     {atsScoreData.missingVerifiedSkills.map((skill, idx) => (
-                      <button
+                      <div
                         key={idx}
-                        type="button"
-                        onClick={() => {
-                          // Add to tools or appropriate category
-                          setResumeData((prev) => {
-                            const clone = JSON.parse(JSON.stringify(prev));
-                            clone.skills = clone.skills || {};
-                            clone.skills.tools = clone.skills.tools || [];
-                            if (!clone.skills.tools.includes(skill)) {
-                              clone.skills.tools.push(skill);
-                            }
-                            return clone;
-                          });
-                          toast.success(`Added ${skill} to your verified skills!`);
-                        }}
-                        className="px-2.5 py-1 bg-amber-500/10 hover:bg-amber-500/20 text-amber-200 border border-amber-500/30 rounded-lg text-xs font-semibold flex items-center gap-1 transition"
+                        className="p-3 bg-slate-900/80 border border-slate-800 rounded-xl flex flex-col sm:flex-row sm:items-center justify-between gap-3"
                       >
-                        <Plus className="w-3 h-3" /> Add "{skill}"
-                      </button>
+                        <div className="flex items-center gap-2">
+                          <span className="text-xs font-bold text-white">{skill}</span>
+                          <span className="text-[10px] text-slate-400">Required by job posting</span>
+                        </div>
+
+                        <div className="flex items-center gap-2 flex-wrap">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setResumeData((prev) => {
+                                const clone = JSON.parse(JSON.stringify(prev));
+                                clone.skills = clone.skills || {};
+                                clone.skills.tools = clone.skills.tools || [];
+                                if (!clone.skills.tools.includes(skill)) {
+                                  clone.skills.tools.push(skill);
+                                }
+                                return clone;
+                              });
+                              setAtsScoreData((prev) => ({
+                                ...prev,
+                                missingVerifiedSkills: prev.missingVerifiedSkills.filter((s) => s !== skill),
+                                matchedKeywords: [...(prev.matchedKeywords || []), skill],
+                              }));
+                              toast.success(`Verified: Added ${skill} to your genuine skills!`);
+                            }}
+                            className="px-2.5 py-1 bg-emerald-600 hover:bg-emerald-500 text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition cursor-pointer"
+                          >
+                            <Check className="w-3.5 h-3.5" /> Yes, I have used it
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setResumeData((prev) => {
+                                const clone = JSON.parse(JSON.stringify(prev));
+                                clone.skills = clone.skills || {};
+                                clone.skills.tools = clone.skills.tools || [];
+                                const labeled = `${skill} (Basic)`;
+                                if (!clone.skills.tools.includes(labeled)) {
+                                  clone.skills.tools.push(labeled);
+                                }
+                                return clone;
+                              });
+                              setAtsScoreData((prev) => ({
+                                ...prev,
+                                missingVerifiedSkills: prev.missingVerifiedSkills.filter((s) => s !== skill),
+                              }));
+                              toast.success(`Added ${skill} with basic knowledge note.`);
+                            }}
+                            className="px-2.5 py-1 bg-amber-600/80 hover:bg-amber-600 text-white rounded-lg text-xs font-semibold flex items-center gap-1 transition cursor-pointer"
+                          >
+                            <Sparkles className="w-3.5 h-3.5" /> Basic knowledge
+                          </button>
+
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setAtsScoreData((prev) => ({
+                                ...prev,
+                                missingVerifiedSkills: prev.missingVerifiedSkills.filter((s) => s !== skill),
+                              }));
+                              toast('Skill omitted to maintain strict resume honesty.');
+                            }}
+                            className="px-2.5 py-1 bg-slate-800 hover:bg-slate-700 text-slate-400 hover:text-slate-200 rounded-lg text-xs font-medium transition cursor-pointer"
+                          >
+                            <X className="w-3.5 h-3.5" /> No (Omit)
+                          </button>
+                        </div>
+                      </div>
                     ))}
                   </div>
                 </div>

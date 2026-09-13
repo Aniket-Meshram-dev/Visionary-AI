@@ -34,7 +34,8 @@ import {
     getUserResumes,
     getResumeDetails,
     saveResumeVersion,
-    deleteResume
+    deleteResume,
+    autoFixAuditResume
 } from "../controllers/resumeBuilderController.js";
 import { upload } from "../configs/multer.js";
 import { aiRateLimiter } from "../middlewares/rateLimiter.js";
@@ -89,6 +90,7 @@ aiRouter.post('/resume-builder/improve-section', optionalAuth, improveResumeSect
 aiRouter.get('/resume-builder/list', auth, getUserResumes)
 aiRouter.get('/resume-builder/:id', auth, getResumeDetails)
 aiRouter.post('/resume-builder/save', auth, saveResumeVersion)
+aiRouter.post('/resume-builder/auto-fix-audit', optionalAuth, autoFixAuditResume)
 aiRouter.delete('/resume-builder/:id', auth, deleteResume)
 
 export default aiRouter

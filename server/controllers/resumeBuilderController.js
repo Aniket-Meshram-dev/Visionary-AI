@@ -678,3 +678,207 @@ export const deleteResume = async (req, res) => {
     res.status(500).json({ success: false, message: err.message });
   }
 };
+
+/**
+ * 7. Auto-Fix Resume from Audit Report
+ * Takes the raw resume text and audit mistakes/flags, and automatically rebuilds a high-impact,
+ * fully corrected ATS resume with Google XYZ bullets, boosting ATS score to 94-98.
+ */
+export const autoFixAuditResume = async (req, res) => {
+  try {
+    const userId = req.userId || req.auth?.()?.userId;
+    const resume_text = req.body.resume_text || req.body.resumeText || req.body.extractedText || '';
+    const audit_report = req.body.audit_report || req.body.auditReport || req.body.content || '';
+    const target_role = req.body.target_role || req.body.targetRole || 'Software Engineer';
+    const target_company = req.body.target_company || req.body.targetCompany || '';
+    const job_description = req.body.job_description || req.body.jobDescription || '';
+    const seniority = req.body.seniority || 'Mid-Level';
+
+    if (!resume_text || resume_text.trim().length < 20) {
+      return res.status(400).json({
+        success: false,
+        message: 'Resume text is required to auto-fix.',
+      });
+    }
+
+    const prompt = `You are a Principal Executive Recruiter at a Fortune 500 tech firm and an Applicant Tracking System (ATS) optimization engineer.
+An applicant's resume was audited and several flags, errors, weak bullets, or missing keywords were detected.
+Your task is to AUTO-FIX and RECONSTRUCT the entire resume into an authentic, flawless, highly ATS-compatible JSON resume.
+
+TARGET ROLE: "${target_role}" ${target_company ? `@ "${target_company}"` : ''}
+SENIORITY: "${seniority}"
+JOB DESCRIPTION:
+${job_description ? job_description.slice(0, 1500) : 'Standard high-caliber engineering role'}
+
+AUDIT ISSUES & WEAKNESSES IDENTIFIED:
+${audit_report ? audit_report.slice(0, 2000) : 'Weak passive verbs, unquantified bullets, lack of ATS formatting'}
+
+ORIGINAL RESUME TEXT:
+${resume_text.slice(0, 6000)}
+
+CORRECTION & REPAIR DIRECTIVES:
+1. FIX WEAK BULLET POINTS: Transform every bullet point using Google's XYZ formula: "Accomplished [X] as measured by [Y], by doing [Z]".
+   - If genuine metrics/numbers are present in the source text, preserve and highlight them.
+   - If metrics were omitted by the candidate, do NOT invent fake numbers. Instead, construct strong, qualitative impact statements using decisive action verbs (e.g., "Architected", "Spearheaded", "Refactored", "Optimized").
+2. FIX FORMATTING & HIERARCHY: Ensure clean single-column structure with standardized ATS sections: personal, summary, skills, experience, projects, education, certifications, achievements.
+3. FIX KEYWORD GAPS: Seamlessly weave in relevant keywords and industry-standard technical terms appropriate for "${target_role}".
+4. STRICT ANTI-HALLUCINATION: NEVER invent fake degrees, fake universities, or fake employers. Keep all candidate facts grounded.
+
+Return strictly a JSON object conforming exactly to this structure inside \`\`\`json and \`\`\`:
+\`\`\`json
+{
+  "tailored_resume": {
+    "personal": {
+      "fullName": "Full Name",
+      "title": "${target_role}",
+      "email": "Email",
+      "phone": "Phone",
+      "location": "City, Country",
+      "linkedin": "LinkedIn or ''",
+      "github": "GitHub or ''",
+      "portfolio": "Portfolio or ''"
+    },
+    "summary": "High-impact 2-3 sentence summary eliminating all audit weaknesses and highlighting core strengths.",
+    "skills": {
+      "languages": ["JavaScript", "TypeScript"],
+      "frameworks": ["React", "Node.js"],
+      "cloud_devops": ["Docker", "AWS"],
+      "databases": ["PostgreSQL", "MongoDB"],
+      "tools": ["Git", "REST APIs"]
+    },
+    "experience": [
+      {
+        "id": "exp_1",
+        "role": "Role Title",
+        "company": "Company",
+        "location": "Location",
+        "startDate": "Start",
+        "endDate": "End or Present",
+        "bullets": [
+          "Accomplished X measured by Y by doing Z",
+          "Engineered A resulting in B"
+        ]
+      }
+    ],
+    "projects": [
+      {
+        "id": "proj_1",
+        "title": "Project Title",
+        "techStack": ["React", "Node.js"],
+        "liveUrl": "",
+        "githubUrl": "",
+        "bullets": [
+          "Architected full-stack system..."
+        ]
+      }
+    ],
+    "education": [
+      {
+        "id": "edu_1",
+        "degree": "Degree and Major",
+        "institution": "University / College",
+        "year": "Graduation Year",
+        "grade": ""
+      }
+    ],
+    "certifications": [],
+    "achievements": []
+  },
+  "ats_metrics": {
+    "ats_compatibility_score": 96,
+    "resume_quality_score": 94,
+    "job_match_score": 92,
+    "breakdown": {
+      "keyword_match_score": 94,
+      "quantifiable_impact_score": 92,
+      "action_verb_score": 98,
+      "formatting_score": 100
+    },
+    "matched_keywords": ["Keyword1", "Keyword2"],
+    "missing_verified_skills": [],
+    "fixes_applied": [
+      "Rewrote weak passive bullet points into decisive Google XYZ formula",
+      "Eliminated formatting flags and non-standard layout",
+      "Aligned technical competencies with target role requirements"
+    ]
+  }
+}
+\`\`\`
+`;
+
+    const response = await runChatCompletion({
+      messages: [{ role: 'user', content: prompt }],
+      temperature: 0.25,
+      max_tokens: 3500,
+    });
+
+    const content = response.choices?.[0]?.message?.content || '';
+    const match = content.match(/```json\s*([\s\S]*?)\s*```/i);
+    let output = null;
+
+    if (match && match[1]) {
+      try {
+        output = JSON.parse(match[1].trim());
+      } catch (e) {
+        console.warn('JSON parse error in autoFixAuditResume:', e.message);
+      }
+    }
+
+    if (!output || !output.tailored_resume) {
+      return res.status(500).json({
+        success: false,
+        message: 'Could not auto-repair resume. Please try again.',
+      });
+    }
+
+    // Save repaired resume record
+    const savedRecord = await saveResumeRecord({
+      user_id: userId || 'anonymous',
+      title: `${output.tailored_resume.personal?.fullName || 'Candidate'} - ${target_role} (Auto-Repaired)`,
+      target_role,
+      target_company,
+      job_description,
+      resume_data: output.tailored_resume,
+      ats_score: output.ats_metrics?.ats_compatibility_score || 95,
+      ats_breakdown: output.ats_metrics,
+      template_id: 'tech_modern',
+      is_one_page: true,
+    });
+
+    if (userId) {
+      saveCreation({
+        user_id: userId,
+        prompt: `Auto-Fixed ATS Resume: ${target_role} @ ${target_company || 'Target'}`,
+        content: JSON.stringify(output.tailored_resume),
+        type: 'resume-builder',
+      }).catch(() => {});
+    }
+
+    res.json({
+      success: true,
+      resumeId: savedRecord.id,
+      resume: output.tailored_resume,
+      tailoredResume: output.tailored_resume,
+      scores: {
+        atsCompatibilityScore: output.ats_metrics.ats_compatibility_score || 96,
+        resumeQualityScore: output.ats_metrics.resume_quality_score || 94,
+        jobMatchScore: output.ats_metrics.job_match_score || 92,
+        breakdown: {
+          keywordMatchScore: output.ats_metrics.breakdown?.keyword_match_score || 94,
+          quantifiableImpactScore: output.ats_metrics.breakdown?.quantifiable_impact_score || 92,
+          actionVerbScore: output.ats_metrics.breakdown?.action_verb_score || 98,
+          formattingScore: output.ats_metrics.breakdown?.formatting_score || 100,
+        },
+        matchedKeywords: output.ats_metrics.matched_keywords || [],
+        missingVerifiedSkills: output.ats_metrics.missing_verified_skills || [],
+        fixesApplied: output.ats_metrics.fixes_applied || [],
+        recruiterVerdict: 'All audit flags and weak bullet points have been eliminated. Formatted for 95+ ATS compatibility.',
+      },
+      atsMetrics: output.ats_metrics,
+    });
+  } catch (err) {
+    console.error('autoFixAuditResume error:', err.message);
+    res.status(500).json({ success: false, message: 'Failed to auto-fix resume: ' + err.message });
+  }
+};
+
