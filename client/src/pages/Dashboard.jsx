@@ -79,6 +79,16 @@ const Dashboard = () => {
   // All 6 Upgraded Creation Studios
   const studioCards = [
     {
+      title: 'AI Resume Builder',
+      badge: 'ATS Certified',
+      badgeClass: 'bg-emerald-50 text-emerald-700 border-emerald-200/80',
+      description: 'Zero-hallucination ATS resume studio with live A4 canvas, smart follow-up interview & dual PDF/Word export.',
+      route: '/ai/resume-builder',
+      icon: Sparkles,
+      gradient: 'from-emerald-500 to-teal-600',
+      cta: 'Build ATS Resume',
+    },
+    {
       title: 'Write Article',
       badge: '3-Stage Agentic',
       badgeClass: 'bg-blue-50 text-blue-700 border-blue-200/80',

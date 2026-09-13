@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import {
   FileText,
   Sparkles,
@@ -67,6 +68,7 @@ const ReviewResume = () => {
   const [copiedKeyword, setCopiedKeyword] = useState(null)
 
   const { getToken, user } = useAuth()
+  const navigate = useNavigate()
 
   const handleFileChange = (selectedFile) => {
     if (!selectedFile) return
@@ -275,17 +277,30 @@ const ReviewResume = () => {
 
   return (
     <div className='h-full overflow-y-auto p-4 sm:p-8 max-w-7xl mx-auto'>
-      {/* Page Title */}
-      <div className='mb-6'>
-        <div className='flex items-center gap-2 text-emerald-600 font-semibold text-xs tracking-wider uppercase'>
-          <Award className='w-4 h-4' /> AI Career Strategist
+      {/* Page Title & Promo Banner */}
+      <div className='mb-6 space-y-4'>
+        <div className='flex flex-col sm:flex-row sm:items-center justify-between gap-4'>
+          <div>
+            <div className='flex items-center gap-2 text-emerald-600 font-semibold text-xs tracking-wider uppercase'>
+              <Award className='w-4 h-4' /> AI Career Strategist
+            </div>
+            <h1 className='text-2xl sm:text-3xl font-bold text-slate-900 mt-1'>
+              ATS Resume Audit & Scoring
+            </h1>
+            <p className='text-xs sm:text-sm text-slate-500 mt-1'>
+              Diagnose keyword density, formatting compliance, quantifiable bullet impact, and job alignment.
+            </p>
+          </div>
+
+          <button
+            type='button'
+            onClick={() => navigate('/ai/resume-builder')}
+            className='px-4 py-2.5 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white text-xs font-bold rounded-xl shadow-md flex items-center gap-2 transition shrink-0 self-start sm:self-auto cursor-pointer'
+          >
+            <Sparkles className='w-4 h-4' />
+            Launch AI Resume Builder Studio
+          </button>
         </div>
-        <h1 className='text-2xl sm:text-3xl font-bold text-slate-900 mt-1'>
-          ATS Resume Audit & Scoring
-        </h1>
-        <p className='text-xs sm:text-sm text-slate-500 mt-1'>
-          Diagnose keyword density, formatting compliance, quantifiable bullet impact, and job alignment.
-        </p>
       </div>
 
       {/* Split Workbench */}

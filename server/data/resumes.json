@@ -1,0 +1,232 @@
+[
+  {
+    "id": "c3d100fc-f52f-4ad5-a9b4-c6f811392a9b",
+    "user_id": "anonymous",
+    "title": "Senior Full Stack Engineer - Acme Corp Resume",
+    "target_role": "Senior Full Stack Engineer",
+    "target_company": "Acme Corp",
+    "job_description": "Seeking Senior Full Stack Engineer with React, Node.js, and PostgreSQL experience.",
+    "jd_analysis": {},
+    "resume_data": {
+      "personal": {
+        "fullName": "Alex Morgan",
+        "email": "alex.morgan@example.com",
+        "phone": "+1 555-019-2834",
+        "location": "San Francisco, CA"
+      },
+      "summary": "Seasoned Full Stack Engineer with deep expertise in React, Node.js, and PostgreSQL. Adept at delivering high‑impact, user‑centric applications that scale. Passionate about clean architecture, performance optimization, and cross‑functional collaboration.",
+      "skills": {
+        "languages": [
+          "JavaScript",
+          "TypeScript",
+          "SQL"
+        ],
+        "frameworks": [
+          "React",
+          "Node.js",
+          "Express"
+        ],
+        "cloud_devops": [],
+        "databases": [
+          "PostgreSQL"
+        ],
+        "tools": []
+      },
+      "experience": [
+        {
+          "id": "1",
+          "role": "Full Stack Engineer",
+          "company": "TechCorp",
+          "location": "",
+          "startDate": "",
+          "endDate": "",
+          "bullets": [
+            "Built a client onboarding dashboard in React, improving user onboarding experience and reducing time‑to‑value.",
+            "Optimized PostgreSQL queries, eliminating redundant data fetches and accelerating page load times."
+          ]
+        }
+      ],
+      "projects": [],
+      "education": [],
+      "certifications": [],
+      "achievements": []
+    },
+    "ats_score": 92,
+    "ats_breakdown": {
+      "ats_compatibility_score": 92,
+      "resume_quality_score": 90,
+      "job_match_score": 88,
+      "keyword_match_pct": 86,
+      "measurable_impact_pct": 75,
+      "action_verb_score": 94,
+      "formatting_score": 96,
+      "matched_keywords": [
+        "React",
+        "PostgreSQL",
+        "Node.js"
+      ],
+      "missing_verified_skills": [
+        "AWS S3",
+        "GraphQL"
+      ],
+      "transparent_breakdown": {
+        "strengths": [
+          "Strong action verbs across all bullets",
+          "Clear semantic section hierarchy"
+        ],
+        "areas_to_improve": [
+          "Add more verified scale metrics to older projects if available"
+        ]
+      }
+    },
+    "template_id": "tech_modern",
+    "is_one_page": true,
+    "created_at": "2026-09-13T06:23:32.442Z",
+    "updated_at": "2026-09-13T06:23:32.442Z"
+  },
+  {
+    "id": "52b9704e-8737-440f-b891-516b0086a0f1",
+    "user_id": "test-user-123",
+    "title": "Full Stack Engineer - Stripe Resume",
+    "target_role": "Full Stack Engineer",
+    "target_company": "Stripe",
+    "job_description": "We are looking for a Full Stack Engineer to build next-generation payment infrastructure.\nRequirements:\n- 3+ years experience with React, TypeScript, Node.js, and PostgreSQL.\n- Experience with distributed systems, microservices, and Docker/Kubernetes.\n- Familiarity with CI/CD automation, API performance tuning, and Redis caching.\n- Excellent communication and cross-functional leadership skills.",
+    "jd_analysis": {
+      "role_title": "Full Stack Engineer",
+      "experience_level": "Mid-Level",
+      "top_keywords": [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "PostgreSQL",
+        "Docker",
+        "Kubernetes"
+      ],
+      "hard_skills": [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "PostgreSQL",
+        "Docker",
+        "Kubernetes",
+        "Redis"
+      ],
+      "soft_skills": [
+        "Excellent communication",
+        "Cross-functional leadership"
+      ],
+      "key_responsibilities": [
+        "Build high-scale microservices",
+        "Optimize system performance",
+        "Implement CI/CD automation"
+      ],
+      "company_focus": "Building scalable, reliable payment infrastructure while shipping high‑quality features quickly."
+    },
+    "resume_data": {
+      "personal": {
+        "fullName": "Alex Morgan",
+        "email": "alex.morgan@example.com",
+        "phone": "+1 555 019 2831",
+        "location": "San Francisco, CA",
+        "linkedin": "https://linkedin.com/in/alexmorgan",
+        "github": "https://github.com/alexmorgan"
+      },
+      "summary": "Full‑Stack Engineer with 2+ years of hands‑on experience building payment‑focused web applications. Expert in React, TypeScript, Node.js, and PostgreSQL, with a strong foundation in Docker‑based microservices. Proven ability to improve system reliability and collaborate across product, design, and operations teams.",
+      "skills": {
+        "languages": [
+          "TypeScript",
+          "JavaScript",
+          "SQL"
+        ],
+        "frameworks": [
+          "React",
+          "Node.js",
+          "Express"
+        ],
+        "cloud_devops": [
+          "Docker",
+          "CI/CD"
+        ],
+        "databases": [
+          "PostgreSQL",
+          "Redis"
+        ],
+        "tools": []
+      },
+      "experience": [
+        {
+          "id": "exp_1",
+          "role": "Software Engineer",
+          "company": "Fintech Inc",
+          "location": "Remote",
+          "startDate": "2022",
+          "endDate": "Present",
+          "bullets": [
+            "Accomplished a 25% reduction in processing errors measured by error‑rate by optimizing the payment‑processing backend.",
+            "Created a React dashboard for financial analysts, streamlining data access and accelerating decision‑making."
+          ]
+        }
+      ],
+      "projects": [
+        {
+          "id": "proj_1",
+          "title": "Distributed Transaction Monitor",
+          "techStack": [
+            "Node.js",
+            "PostgreSQL",
+            "Redis"
+          ],
+          "liveUrl": "",
+          "githubUrl": "https://github.com/alexmorgan/distributed-transaction-monitor",
+          "bullets": [
+            "Designed and built a real‑time transaction processing pipeline, improving monitoring latency and reliability."
+          ]
+        }
+      ],
+      "education": [
+        {
+          "degree": "B.S. in Computer Science",
+          "institution": "University of California, Berkeley",
+          "year": "2018 - 2022"
+        }
+      ],
+      "certifications": [],
+      "achievements": []
+    },
+    "ats_score": 92,
+    "ats_breakdown": {
+      "ats_compatibility_score": 92,
+      "resume_quality_score": 90,
+      "job_match_score": 88,
+      "keyword_match_pct": 86,
+      "measurable_impact_pct": 75,
+      "action_verb_score": 94,
+      "formatting_score": 96,
+      "matched_keywords": [
+        "React",
+        "TypeScript",
+        "Node.js",
+        "PostgreSQL",
+        "Docker",
+        "Redis"
+      ],
+      "missing_verified_skills": [
+        "Kubernetes",
+        "API performance tuning"
+      ],
+      "transparent_breakdown": {
+        "strengths": [
+          "Strong action verbs across all bullets",
+          "Clear semantic section hierarchy"
+        ],
+        "areas_to_improve": [
+          "Add more verified scale metrics to older projects if available"
+        ]
+      }
+    },
+    "template_id": "tech_modern",
+    "is_one_page": true,
+    "created_at": "2026-09-13T06:12:48.297Z",
+    "updated_at": "2026-09-13T06:12:48.297Z"
+  }
+]

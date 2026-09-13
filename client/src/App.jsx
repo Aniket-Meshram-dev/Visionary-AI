@@ -17,6 +17,7 @@ const QuickCode = lazy(() => import('./pages/QuickCode'))
 const GenerateImages = lazy(() => import('./pages/GenerateImages'))
 const PhotoCleanup = lazy(() => import('./pages/PhotoCleanup'))
 const ReviewResume = lazy(() => import('./pages/ReviewResume'))
+const ResumeBuilder = lazy(() => import('./pages/ResumeBuilder'))
 const Community = lazy(() => import('./pages/Community'))
 const PublicShare = lazy(() => import('./pages/PublicShare'))
 const AdminDashboard = lazy(() => import('./pages/admin/AdminDashboard'))
@@ -72,6 +73,7 @@ const App = () => {
             <Route path='remove-background' element={<PhotoCleanup initialMode='background' />} />
             <Route path='remove-object' element={<PhotoCleanup initialMode='object' />} />
             <Route path='review-resume' element={<ReviewResume />} />
+            <Route path='resume-builder' element={<ResumeBuilder />} />
             <Route path='community' element={<Community />} />
             <Route
               path='admin'

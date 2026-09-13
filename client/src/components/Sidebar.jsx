@@ -29,12 +29,13 @@ const workspaceNavItems = [
 ]
 
 const studioNavItems = [
+  { to: '/ai/resume-builder', label: 'AI Resume Studio', Icon: Sparkles, badge: 'PRO' },
+  { to: '/ai/review-resume', label: 'Review Resume', Icon: FileText, badge: 'ATS' },
   { to: '/ai/write-article', label: 'Write Article', Icon: SquarePen, badge: null },
   { to: '/ai/summarize-article', label: 'Summarize Text', Icon: Hash, badge: null },
   { to: '/ai/quick-code', label: 'Quick Code', Icon: Code, badge: 'Fast' },
   { to: '/ai/generate-images', label: 'Generate Images', Icon: Image, badge: null },
   { to: '/ai/photo-cleanup', label: 'Photo Cleanup Studio', Icon: Wand2, badge: 'Magic' },
-  { to: '/ai/review-resume', label: 'Review Resume', Icon: FileText, badge: 'ATS' },
   { to: '/ai/community', label: 'Community Feed', Icon: Users, badge: null },
 ]
 

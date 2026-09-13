@@ -72,7 +72,7 @@ async function fetchPollinationsCompletion(messages, temperature = 0.7) {
 }
 
 // Helper to run chat completion with seamless model fallback and self-healing 413/429 recovery
-async function runChatCompletion({ messages, temperature = 0.7, max_tokens = 1000 }) {
+export async function runChatCompletion({ messages, temperature = 0.7, max_tokens = 1000 }) {
     let currentMessages = messages;
     let currentMaxTokens = max_tokens;
     let lastError = null;

@@ -25,6 +25,17 @@ import {
     enhanceImagePrompt,
     optimizeResumeBullet
 } from "../controllers/aiController.js";
+import {
+    parseUploadedResume,
+    analyzeJobDescription,
+    generateSmartFollowUp,
+    synthesizeResume,
+    improveResumeSection,
+    getUserResumes,
+    getResumeDetails,
+    saveResumeVersion,
+    deleteResume
+} from "../controllers/resumeBuilderController.js";
 import { upload } from "../configs/multer.js";
 import { aiRateLimiter } from "../middlewares/rateLimiter.js";
 
@@ -68,5 +79,16 @@ aiRouter.post('/resume-review', upload.single('resume'), auth, resumeReview)
 aiRouter.post('/generate-cover-letter', auth, generateCoverLetter)
 aiRouter.post('/optimize-resume-bullet', auth, optimizeResumeBullet)
 aiRouter.post('/execute-code', auth, executeCode)
+
+// AI-Powered ATS Resume Builder Studio
+aiRouter.post('/resume-builder/parse', upload.single('resume'), optionalAuth, parseUploadedResume)
+aiRouter.post('/resume-builder/analyze-jd', optionalAuth, analyzeJobDescription)
+aiRouter.post('/resume-builder/smart-followup', optionalAuth, generateSmartFollowUp)
+aiRouter.post('/resume-builder/synthesize', optionalAuth, synthesizeResume)
+aiRouter.post('/resume-builder/improve-section', optionalAuth, improveResumeSection)
+aiRouter.get('/resume-builder/list', auth, getUserResumes)
+aiRouter.get('/resume-builder/:id', auth, getResumeDetails)
+aiRouter.post('/resume-builder/save', auth, saveResumeVersion)
+aiRouter.delete('/resume-builder/:id', auth, deleteResume)
 
 export default aiRouter
