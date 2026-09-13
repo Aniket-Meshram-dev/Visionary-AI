@@ -42,19 +42,13 @@
 
 ## 🎬 Full 1080p Video Walkthrough (End-to-End Demo)
 
-<div align="center">
+https://github.com/user-attachments/assets/99130bc6-1123-431f-a0e2-73ce7a57565d
 
-<video src="./recordings/visionary-ai-full-walkthrough.mp4" controls="controls" width="100%" poster="./recordings/thumbnail.png" style="max-width: 900px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
-  Your browser does not support the video tag.
-</video>
+<br/>
 
-<br/><br/>
+<sub>▶️ <b>Watch the full 3-minute 1080p walkthrough above</b> covering every single page, feature, ATS resume builder, code generator, and interactive AI tool.</sub>
 
-[![Watch 1080p Full Demo Video](./recordings/thumbnail.png)](https://github.com/Aniket-Meshram-dev/Visionary-AI/raw/main/recordings/visionary-ai-full-walkthrough.mp4)
-
-<sub>▶️ <b>[Click here to watch or download the full 1080p walkthrough MP4 (3m 06s)](https://github.com/Aniket-Meshram-dev/Visionary-AI/raw/main/recordings/visionary-ai-full-walkthrough.mp4)</b> covering every single page, feature, and interactive AI tool.</sub>
-
-</div>
+<br/>
 
 ---
 
