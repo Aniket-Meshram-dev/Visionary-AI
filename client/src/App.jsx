@@ -74,6 +74,7 @@ const App = () => {
             <Route path='remove-object' element={<PhotoCleanup initialMode='object' />} />
             <Route path='review-resume' element={<ReviewResume />} />
             <Route path='resume-builder' element={<ResumeBuilder />} />
+            <Route path='resume_builder' element={<ResumeBuilder />} />
             <Route path='community' element={<Community />} />
             <Route
               path='admin'

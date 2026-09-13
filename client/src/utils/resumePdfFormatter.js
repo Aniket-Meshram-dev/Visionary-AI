@@ -7,9 +7,118 @@ import { Document, Packer, Paragraph, TextRun, HeadingLevel, AlignmentType, Exte
 /**
  * 1. Generate ATS-Compliant Printable HTML (Vector Print)
  */
+function getPdfTemplateTheme(template) {
+  switch (template) {
+    case 'harvard':
+      return {
+        fontFamily: "'Times New Roman', Times, Georgia, serif",
+        primaryColor: '#111827',
+        headingBorder: '1px solid #111827',
+        headerAlign: 'center',
+        headerBorder: '2px solid #111827',
+        nameTransform: 'uppercase',
+        titleColor: '#374151',
+      };
+    case 'executive':
+      return {
+        fontFamily: "'Segoe UI', Arial, Helvetica, sans-serif",
+        primaryColor: '#0f172a',
+        headingBorder: '2px solid #0f172a',
+        headerAlign: 'left',
+        headerBorder: '1.5px solid #cbd5e1',
+        nameTransform: 'uppercase',
+        titleColor: '#334155',
+      };
+    case 'minimal_clean':
+      return {
+        fontFamily: "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif",
+        primaryColor: '#334155',
+        headingBorder: '1px solid #e2e8f0',
+        headerAlign: 'left',
+        headerBorder: 'none',
+        nameTransform: 'none',
+        titleColor: '#64748b',
+      };
+    case 'corporate_formal':
+      return {
+        fontFamily: "'Times New Roman', Times, Georgia, serif",
+        primaryColor: '#1e3a8a',
+        headingBorder: '1px solid #93c5fd',
+        headerAlign: 'center',
+        headerBorder: '3px double #1e3a8a',
+        nameTransform: 'uppercase',
+        titleColor: '#1e3a8a',
+      };
+    case 'modern_teal':
+      return {
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif",
+        primaryColor: '#0d9488',
+        headingBorder: '1px solid #99f6e4',
+        headerAlign: 'left',
+        headerBorder: '1px solid #ccfbf1',
+        nameTransform: 'none',
+        titleColor: '#0f766e',
+      };
+    case 'emerald_compact':
+      return {
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif",
+        primaryColor: '#059669',
+        headingBorder: '1px solid #a7f3d0',
+        headerAlign: 'left',
+        headerBorder: '1px solid #d1fae5',
+        nameTransform: 'none',
+        titleColor: '#047857',
+      };
+    case 'monochrome_bold':
+      return {
+        fontFamily: "Arial, Helvetica, sans-serif",
+        primaryColor: '#000000',
+        headingBorder: '2px solid #000000',
+        headerAlign: 'left',
+        headerBorder: '2px solid #000000',
+        nameTransform: 'uppercase',
+        titleColor: '#000000',
+      };
+    case 'creative_indigo':
+      return {
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
+        primaryColor: '#6366f1',
+        headingBorder: 'none; border-left: 4px solid #6366f1; padding-left: 8px',
+        headerAlign: 'left',
+        headerBorder: 'none; border-left: 4px solid #6366f1; padding-left: 10px',
+        nameTransform: 'none',
+        titleColor: '#4f46e5',
+      };
+    case 'classic_serif':
+      return {
+        fontFamily: "'Times New Roman', Times, Georgia, serif",
+        primaryColor: '#1c1917',
+        headingBorder: '1px solid #a8a29e',
+        headerAlign: 'center',
+        headerBorder: '1px solid #44403c',
+        nameTransform: 'uppercase',
+        titleColor: '#44403c',
+      };
+    case 'tech_modern':
+    default:
+      return {
+        fontFamily: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif",
+        primaryColor: '#4f46e5',
+        headingBorder: '1px solid #e0e7ff',
+        headerAlign: 'left',
+        headerBorder: 'none',
+        nameTransform: 'none',
+        titleColor: '#4f46e5',
+      };
+  }
+}
+
+/**
+ * 1. Generate ATS-Compliant Printable HTML (Vector Print)
+ */
 export function generateResumePrintableHtml(resumeData, options = {}) {
   const {
-    template = 'tech_modern', // 'tech_modern' | 'harvard' | 'executive'
+    template = 'tech_modern',
     isOnePage = true,
   } = options;
 
@@ -22,18 +131,11 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
   const certifications = Array.isArray(resumeData?.certifications) ? resumeData.certifications : [];
   const achievements = Array.isArray(resumeData?.achievements) ? resumeData.achievements : [];
 
-  // Font and color palettes based on template
-  const isHarvard = template === 'harvard';
-  const isExecutive = template === 'executive';
-
-  const fontFamily = isHarvard
-    ? "'Times New Roman', Times, Georgia, serif"
-    : isExecutive
-    ? "'Segoe UI', Arial, Helvetica, sans-serif"
-    : "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif";
-
-  const primaryColor = isHarvard ? '#111827' : isExecutive ? '#0f172a' : '#4f46e5';
-  const headingBorder = isHarvard ? '1px solid #1f2937' : isExecutive ? '1.5px solid #0f172a' : '1px solid #e2e8f0';
+  const theme = getPdfTemplateTheme(template);
+  const isCentered = theme.headerAlign === 'center';
+  const fontFamily = theme.fontFamily;
+  const primaryColor = theme.primaryColor;
+  const headingBorder = theme.headingBorder;
 
   // Contact items line
   const contactParts = [
@@ -85,10 +187,10 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
     }
     /* Header */
     .resume-header {
-      text-align: ${isHarvard ? 'center' : 'left'};
+      text-align: ${theme.headerAlign};
       margin-bottom: ${isOnePage ? '8px' : '12px'};
       padding-bottom: ${isOnePage ? '6px' : '8px'};
-      border-bottom: ${isHarvard ? '2px solid #111827' : 'none'};
+      border-bottom: ${theme.headerBorder};
     }
     .candidate-name {
       font-size: ${isOnePage ? '18pt' : '20pt'};
@@ -96,7 +198,7 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
       letter-spacing: -0.02em;
       color: #0f172a;
       margin-bottom: 4px;
-      text-transform: ${isHarvard ? 'uppercase' : 'none'};
+      text-transform: ${theme.nameTransform};
     }
     .contact-line {
       font-size: 8.5pt;
@@ -104,7 +206,7 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      justify-content: ${isHarvard ? 'center' : 'flex-start'};
+      justify-content: ${isCentered ? 'center' : 'flex-start'};
       gap: 8px;
     }
     .contact-line a {

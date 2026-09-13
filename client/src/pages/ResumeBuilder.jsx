@@ -487,6 +487,7 @@ const ResumeBuilder = () => {
 
       if (data.success) {
         toast.success('Resume version saved successfully!');
+        loadUserResumes();
       } else {
         toast.error(data.message || 'Could not save resume');
       }
@@ -524,7 +525,7 @@ const ResumeBuilder = () => {
     }
   };
 
-  // 10. Load User Resumes
+  // 10. Load User Resumes & Auto-Hydrate
   const loadUserResumes = async () => {
     try {
       const token = await getToken();
@@ -532,15 +533,91 @@ const ResumeBuilder = () => {
       const { data } = await axios.get('/api/ai/resume-builder/list', {
         headers: { Authorization: `Bearer ${token}` },
       });
-      if (data.success) {
-        setSavedResumesList(data.resumes || []);
+      if (data.success && Array.isArray(data.resumes)) {
+        setSavedResumesList(data.resumes);
+
+        // If canvas is blank and not arriving with state from audit, load most recent resume automatically
+        if (
+          data.resumes.length > 0 &&
+          !location.state?.autoFixedResume &&
+          (!resumeData.personal?.fullName || resumeData.personal.fullName.trim() === '')
+        ) {
+          const recent = data.resumes[0];
+          const rawData = recent.resume_data || recent.resumeData;
+          const loaded = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
+          if (loaded?.personal?.fullName) {
+            setResumeData(loaded);
+            if (recent.target_role || recent.targetRole) setTargetRole(recent.target_role || recent.targetRole);
+            if (recent.target_company || recent.targetCompany) setTargetCompany(recent.target_company || recent.targetCompany);
+            if (recent.job_description || recent.jobDescription) setJobDescription(recent.job_description || recent.jobDescription);
+            if (recent.template_id || recent.template) setSelectedTemplate(recent.template_id || recent.template);
+            const scores = recent.ats_breakdown || recent.atsScores;
+            if (scores) setAtsScoreData(typeof scores === 'string' ? JSON.parse(scores) : scores);
+          }
+        }
       }
-    } catch {}
+    } catch (err) {
+      console.warn('loadUserResumes error:', err.message);
+    }
   };
 
   useEffect(() => {
     loadUserResumes();
   }, [user]);
+
+  // Handle Loading a Saved Resume Version
+  const handleLoadSelectedResume = (res) => {
+    try {
+      const rawData = res.resume_data || res.resumeData;
+      const loaded = typeof rawData === 'string' ? JSON.parse(rawData) : rawData;
+      if (loaded && typeof loaded === 'object') {
+        setResumeData(loaded);
+
+        const scores = res.ats_breakdown || res.atsScores;
+        if (scores) {
+          setAtsScoreData(typeof scores === 'string' ? JSON.parse(scores) : scores);
+        } else if (typeof res.ats_score === 'number') {
+          setAtsScoreData((prev) => ({
+            ...prev,
+            atsCompatibilityScore: res.ats_score,
+            resumeQualityScore: Math.max(70, res.ats_score - 3),
+            jobMatchScore: Math.max(65, res.ats_score - 5),
+          }));
+        }
+
+        if (res.target_role || res.targetRole) setTargetRole(res.target_role || res.targetRole);
+        if (res.target_company || res.targetCompany) setTargetCompany(res.target_company || res.targetCompany);
+        if (res.job_description || res.jobDescription) setJobDescription(res.job_description || res.jobDescription);
+        if (res.template_id || res.template) setSelectedTemplate(res.template_id || res.template);
+        if (res.is_one_page !== undefined) setIsOnePage(res.is_one_page);
+
+        setShowSavedModal(false);
+        setViewMode('studio');
+        toast.success(`🎉 Loaded "${res.title || 'Resume'}" into Live Studio!`);
+      } else {
+        toast.error('Resume data format unrecognized.');
+      }
+    } catch (err) {
+      toast.error('Failed to load resume: ' + err.message);
+    }
+  };
+
+  // Handle Deleting a Saved Resume Version
+  const handleDeleteSavedResume = async (id, e) => {
+    e.stopPropagation();
+    try {
+      const token = await getToken();
+      const { data } = await axios.delete(`/api/ai/resume-builder/${id}`, {
+        headers: token ? { Authorization: `Bearer ${token}` } : {},
+      });
+      if (data.success) {
+        setSavedResumesList((prev) => prev.filter((r) => r.id !== id));
+        toast.success('Resume version deleted.');
+      }
+    } catch (err) {
+      toast.error('Failed to delete resume: ' + err.message);
+    }
+  };
 
   return (
     <div className="h-full overflow-y-auto p-4 sm:p-8 max-w-7xl mx-auto space-y-6 bg-[#F8FAFC] text-slate-900">
@@ -1822,9 +1899,16 @@ const ResumeBuilder = () => {
                   onChange={(e) => setSelectedTemplate(e.target.value)}
                   className="bg-slate-50 border border-slate-200 text-slate-800 text-xs rounded-lg px-2.5 py-1 outline-none font-medium cursor-pointer"
                 >
-                  <option value="tech_modern">Silicon Valley Modern (Clean Sans)</option>
-                  <option value="harvard">Harvard Classic (Serif Academic)</option>
-                  <option value="executive">Executive Minimalist (Formal Slate)</option>
+                  <option value="tech_modern">1. Silicon Valley Modern (Clean Sans)</option>
+                  <option value="harvard">2. Harvard Classic (Serif Academic)</option>
+                  <option value="executive">3. Executive Leadership (Formal Slate)</option>
+                  <option value="minimal_clean">4. Minimalist Slate (Ultra-Clean)</option>
+                  <option value="corporate_formal">5. Corporate Wall Street (Formal Navy)</option>
+                  <option value="modern_teal">6. Modern Teal (Contemporary Tech)</option>
+                  <option value="emerald_compact">7. Emerald Compact (High-Density 1-Page)</option>
+                  <option value="monochrome_bold">8. Monochrome Bold (ATS Pure B&W)</option>
+                  <option value="creative_indigo">9. Creative Professional (Indigo Accent)</option>
+                  <option value="classic_serif">10. Oxford Academic & Research (Serif)</option>
                 </select>
               </div>
 
@@ -1978,38 +2062,42 @@ const ResumeBuilder = () => {
             </div>
 
             <div className="space-y-2 max-h-[60vh] overflow-y-auto">
-              {savedResumesList.map((res) => (
-                <div
-                  key={res.id}
-                  className="p-3 bg-slate-50 border border-slate-200 hover:border-indigo-300 rounded-xl flex items-center justify-between gap-3 transition"
-                >
-                  <div>
-                    <h5 className="text-xs font-bold text-slate-900">{res.title || 'Untitled Resume'}</h5>
-                    <p className="text-[11px] text-slate-500">
-                      {res.targetRole} {res.targetCompany ? `@ ${res.targetCompany}` : ''} • ATS {res.atsScores?.atsCompatibilityScore || 85}/100
-                    </p>
-                  </div>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      if (res.resumeData) {
-                        setResumeData(res.resumeData);
-                        if (res.atsScores) setAtsScoreData(res.atsScores);
-                        if (res.targetRole) setTargetRole(res.targetRole);
-                        if (res.targetCompany) setTargetCompany(res.targetCompany);
-                        if (res.jobDescription) setJobDescription(res.jobDescription);
-                        if (res.template) setSelectedTemplate(res.template);
-                        toast.success('Resume loaded into studio!');
-                        setShowSavedModal(false);
-                        setViewMode('studio');
-                      }
-                    }}
-                    className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold transition cursor-pointer"
+              {savedResumesList.map((res) => {
+                const targetTitle = res.target_role || res.targetRole || '';
+                const targetComp = res.target_company || res.targetCompany || '';
+                const score = res.ats_score || res.ats_breakdown?.ats_compatibility_score || res.atsScores?.atsCompatibilityScore || 85;
+
+                return (
+                  <div
+                    key={res.id}
+                    className="p-3 bg-slate-50 border border-slate-200 hover:border-indigo-300 rounded-xl flex items-center justify-between gap-3 transition"
                   >
-                    Load
-                  </button>
-                </div>
-              ))}
+                    <div className="min-w-0 flex-1">
+                      <h5 className="text-xs font-bold text-slate-900 truncate">{res.title || 'Untitled Resume'}</h5>
+                      <p className="text-[11px] text-slate-500 truncate">
+                        {targetTitle} {targetComp ? `@ ${targetComp}` : ''} • ATS {score}/100
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-1.5 shrink-0">
+                      <button
+                        type="button"
+                        onClick={() => handleLoadSelectedResume(res)}
+                        className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg text-xs font-semibold transition cursor-pointer shadow-xs"
+                      >
+                        Load
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(e) => handleDeleteSavedResume(res.id, e)}
+                        className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition cursor-pointer"
+                        title="Delete resume version"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>

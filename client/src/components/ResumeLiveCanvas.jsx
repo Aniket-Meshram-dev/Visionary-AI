@@ -55,22 +55,128 @@ const ResumeLiveCanvas = ({
     }
   };
 
-  // Styling attributes based on template
-  const isHarvard = template === 'harvard';
-  const isExecutive = template === 'executive';
+  // 10 ATS-Certified Template Themes
+  const getTheme = (t) => {
+    switch (t) {
+      case 'harvard':
+        return {
+          fontClass: 'font-serif',
+          headerClass: 'mb-3 text-center border-b-2 border-slate-900 pb-2',
+          nameClass: 'text-2xl text-center uppercase tracking-wider text-slate-950 font-bold',
+          roleClass: 'text-center uppercase tracking-widest text-[11px] text-slate-700 font-medium',
+          contactClass: 'justify-center text-slate-600',
+          contactLinkClass: 'text-slate-900 underline',
+          sectionTitleStyle: 'text-xs uppercase font-bold tracking-widest text-slate-900 border-b border-slate-900 pb-0.5 mb-2 mt-3 text-center',
+          bulletClass: 'text-slate-800',
+        };
+      case 'executive':
+        return {
+          fontClass: 'font-sans',
+          headerClass: 'mb-3 border-b-2 border-slate-800 pb-2',
+          nameClass: 'text-2xl tracking-tight text-slate-900 font-extrabold uppercase',
+          roleClass: 'text-slate-700 font-bold uppercase tracking-wider text-xs',
+          contactClass: 'justify-start text-slate-600',
+          contactLinkClass: 'text-slate-900 font-medium',
+          sectionTitleStyle: 'text-xs uppercase font-bold tracking-wider text-slate-900 border-b-2 border-slate-800 pb-0.5 mb-2 mt-3',
+          bulletClass: 'text-slate-800',
+        };
+      case 'minimal_clean':
+        return {
+          fontClass: 'font-sans',
+          headerClass: 'mb-3 pb-1',
+          nameClass: 'text-2xl tracking-tight text-slate-800 font-semibold',
+          roleClass: 'text-slate-500 font-normal text-xs',
+          contactClass: 'justify-start text-slate-500',
+          contactLinkClass: 'text-slate-700',
+          sectionTitleStyle: 'text-xs uppercase font-semibold tracking-widest text-slate-700 border-b border-slate-200 pb-0.5 mb-2 mt-3',
+          bulletClass: 'text-slate-700',
+        };
+      case 'corporate_formal':
+        return {
+          fontClass: 'font-serif',
+          headerClass: 'mb-3 text-center border-b-2 border-double border-blue-950 pb-2',
+          nameClass: 'text-2xl text-center uppercase tracking-wider text-blue-950 font-bold',
+          roleClass: 'text-center uppercase tracking-widest text-[11px] text-blue-900 font-semibold',
+          contactClass: 'justify-center text-slate-700',
+          contactLinkClass: 'text-blue-950 underline',
+          sectionTitleStyle: 'text-xs uppercase font-bold tracking-widest text-blue-950 border-b border-blue-900/40 pb-0.5 mb-2 mt-3 text-center',
+          bulletClass: 'text-slate-800',
+        };
+      case 'modern_teal':
+        return {
+          fontClass: 'font-sans',
+          headerClass: 'mb-3 border-b border-teal-200 pb-2',
+          nameClass: 'text-2xl tracking-tight text-slate-950 font-bold',
+          roleClass: 'text-teal-700 font-semibold text-xs',
+          contactClass: 'justify-start text-slate-600',
+          contactLinkClass: 'text-teal-700 font-medium',
+          sectionTitleStyle: 'text-xs uppercase font-bold tracking-wider text-teal-800 border-b border-teal-300 pb-0.5 mb-2 mt-3',
+          bulletClass: 'text-slate-700',
+        };
+      case 'emerald_compact':
+        return {
+          fontClass: 'font-sans',
+          headerClass: 'mb-2 border-b border-emerald-200 pb-1.5',
+          nameClass: 'text-xl tracking-tight text-slate-950 font-bold',
+          roleClass: 'text-emerald-700 font-semibold text-xs',
+          contactClass: 'justify-start text-slate-600 text-[10.5px]',
+          contactLinkClass: 'text-emerald-700 font-medium',
+          sectionTitleStyle: 'text-[11px] uppercase font-bold tracking-wider text-emerald-800 border-b border-emerald-300 pb-0.5 mb-1.5 mt-2',
+          bulletClass: 'text-slate-700',
+        };
+      case 'monochrome_bold':
+        return {
+          fontClass: 'font-sans',
+          headerClass: 'mb-3 border-b-2 border-black pb-2',
+          nameClass: 'text-2xl tracking-tight text-black font-extrabold uppercase',
+          roleClass: 'text-black font-bold uppercase tracking-wider text-xs',
+          contactClass: 'justify-start text-black',
+          contactLinkClass: 'text-black font-bold underline',
+          sectionTitleStyle: 'text-xs uppercase font-extrabold tracking-wider text-black border-b-2 border-black pb-0.5 mb-2 mt-3',
+          bulletClass: 'text-black',
+        };
+      case 'creative_indigo':
+        return {
+          fontClass: 'font-sans',
+          headerClass: 'mb-3 border-l-4 border-indigo-600 pl-3 py-1',
+          nameClass: 'text-2xl tracking-tight text-slate-950 font-bold',
+          roleClass: 'text-indigo-600 font-semibold text-xs',
+          contactClass: 'justify-start text-slate-600',
+          contactLinkClass: 'text-indigo-600 font-medium',
+          sectionTitleStyle: 'text-xs uppercase font-bold tracking-wider text-indigo-900 border-l-4 border-indigo-500 pl-2 mb-2 mt-3',
+          bulletClass: 'text-slate-700',
+        };
+      case 'classic_serif':
+        return {
+          fontClass: 'font-serif',
+          headerClass: 'mb-3 text-center border-b border-stone-800 pb-2',
+          nameClass: 'text-2xl text-center tracking-normal text-stone-950 font-serif font-bold',
+          roleClass: 'text-center uppercase tracking-widest text-[11px] text-stone-700 font-medium',
+          contactClass: 'justify-center text-stone-700',
+          contactLinkClass: 'text-stone-900 underline',
+          sectionTitleStyle: 'text-xs uppercase font-bold tracking-widest text-stone-900 border-b border-stone-400 pb-0.5 mb-2 mt-3 text-center',
+          bulletClass: 'text-stone-800',
+        };
+      case 'tech_modern':
+      default:
+        return {
+          fontClass: 'font-sans',
+          headerClass: 'mb-3',
+          nameClass: 'text-2xl tracking-tight text-slate-950 font-bold',
+          roleClass: 'text-indigo-600 font-semibold text-xs',
+          contactClass: 'justify-start text-slate-600',
+          contactLinkClass: 'text-indigo-600 font-medium',
+          sectionTitleStyle: 'text-xs uppercase font-bold tracking-wider text-indigo-700 border-b border-indigo-200 pb-0.5 mb-2 mt-3',
+          bulletClass: 'text-slate-700',
+        };
+    }
+  };
 
-  const fontClass = isHarvard
-    ? 'font-serif'
-    : isExecutive
-    ? 'font-sans'
-    : 'font-sans';
-
-  // Section Header Border Styles
-  const sectionTitleStyle = isHarvard
-    ? 'text-xs uppercase font-bold tracking-widest text-slate-900 border-b border-slate-900 pb-0.5 mb-2 mt-3'
-    : isExecutive
-    ? 'text-xs uppercase font-bold tracking-wider text-slate-900 border-b-2 border-slate-800 pb-0.5 mb-2 mt-3'
-    : 'text-xs uppercase font-bold tracking-wider text-indigo-700 border-b border-indigo-200 pb-0.5 mb-2 mt-3';
+  const theme = getTheme(template);
+  const isHarvard = template === 'harvard' || template === 'corporate_formal' || template === 'classic_serif';
+  const isExecutive = template === 'executive' || template === 'monochrome_bold';
+  const fontClass = theme.fontClass;
+  const sectionTitleStyle = theme.sectionTitleStyle;
 
   // Call API for bullet improvement
   const handleImproveBullet = async (instruction, userMetric = '') => {
