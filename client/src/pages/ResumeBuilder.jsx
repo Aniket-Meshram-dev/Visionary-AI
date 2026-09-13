@@ -252,17 +252,19 @@ const ResumeBuilder = () => {
         },
       });
 
-      if (data.success && data.parsedResume) {
-        setResumeData(data.parsedResume);
+      const parsed = data?.parsedResume || data?.parsedData;
+      if (data?.success && parsed) {
+        setResumeData(parsed);
         toast.success(`Successfully imported ${file.name}! Review & optimize your information.`);
         setCurrentStep(2); // Jump to Personal info review
       } else {
-        toast.error(data.message || 'Failed to parse uploaded document');
+        toast.error(data?.message || 'Failed to parse uploaded document');
       }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Could not parse resume');
     } finally {
       setUploadingResume(false);
+      if (e.target) e.target.value = '';
     }
   };
 
@@ -286,11 +288,12 @@ const ResumeBuilder = () => {
         },
       });
 
-      if (parseData.success && parseData.parsedResume) {
+      const parsed = parseData?.parsedResume || parseData?.parsedData;
+      if (parseData?.success && parsed) {
         const { data: fixData } = await axios.post(
           '/api/ai/resume-builder/auto-fix-audit',
           {
-            resume_text: JSON.stringify(parseData.parsedResume),
+            resume_text: JSON.stringify(parsed),
             target_role: targetRole,
             target_company: targetCompany,
             job_description: jobDescription,
@@ -301,23 +304,25 @@ const ResumeBuilder = () => {
           }
         );
 
-        if (fixData.success && fixData.resume) {
-          setResumeData(fixData.resume);
+        const repairedResume = fixData?.resume || fixData?.tailoredResume;
+        if (fixData?.success && repairedResume) {
+          setResumeData(repairedResume);
           if (fixData.scores) setAtsScoreData(fixData.scores);
           setViewMode('studio');
           toast.success(`🎉 ${file.name} parsed and auto-optimized for 95+ ATS score!`, { id: toastId });
         } else {
-          setResumeData(parseData.parsedResume);
+          setResumeData(parsed);
           setCurrentStep(2);
-          toast.success(`Imported ${file.name}!`, { id: toastId });
+          toast.success(`Imported ${file.name}! Review and optimize details.`, { id: toastId });
         }
       } else {
-        toast.error(parseData.message || 'Failed to parse file', { id: toastId });
+        toast.error(parseData?.message || 'Failed to parse file', { id: toastId });
       }
     } catch (err) {
       toast.error(err.response?.data?.message || 'Error processing resume', { id: toastId });
     } finally {
       setUploadingResume(false);
+      if (e.target) e.target.value = '';
     }
   };
 

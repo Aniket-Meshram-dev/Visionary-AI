@@ -155,9 +155,45 @@ ${extractedText.slice(0, 12000)}`;
       };
     }
 
+    // Guarantee normalized schema so frontend state never errors
+    const normalizedResume = {
+      personal: {
+        fullName: parsedData.personal?.fullName || '',
+        email: parsedData.personal?.email || '',
+        phone: parsedData.personal?.phone || '',
+        location: parsedData.personal?.location || '',
+        linkedin: parsedData.personal?.linkedin || '',
+        github: parsedData.personal?.github || '',
+        portfolio: parsedData.personal?.portfolio || '',
+        title: parsedData.personal?.title || '',
+      },
+      summary: parsedData.summary || '',
+      skills: typeof parsedData.skills === 'object' && parsedData.skills !== null && !Array.isArray(parsedData.skills)
+        ? {
+            languages: Array.isArray(parsedData.skills.languages) ? parsedData.skills.languages : [],
+            frameworks: Array.isArray(parsedData.skills.frameworks) ? parsedData.skills.frameworks : [],
+            cloud_devops: Array.isArray(parsedData.skills.cloud_devops) ? parsedData.skills.cloud_devops : [],
+            databases: Array.isArray(parsedData.skills.databases) ? parsedData.skills.databases : [],
+            tools: Array.isArray(parsedData.skills.tools) ? parsedData.skills.tools : [],
+          }
+        : {
+            languages: Array.isArray(parsedData.skills) ? parsedData.skills : [],
+            frameworks: [],
+            cloud_devops: [],
+            databases: [],
+            tools: [],
+          },
+      experience: Array.isArray(parsedData.experience) ? parsedData.experience : [],
+      projects: Array.isArray(parsedData.projects) ? parsedData.projects : [],
+      education: Array.isArray(parsedData.education) ? parsedData.education : [],
+      certifications: Array.isArray(parsedData.certifications) ? parsedData.certifications : [],
+      achievements: Array.isArray(parsedData.achievements) ? parsedData.achievements : [],
+    };
+
     res.json({
       success: true,
-      parsedData,
+      parsedResume: normalizedResume,
+      parsedData: normalizedResume,
       rawText: extractedText.slice(0, 10000),
     });
   } catch (err) {
