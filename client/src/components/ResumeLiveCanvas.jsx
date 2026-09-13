@@ -55,6 +55,13 @@ const ResumeLiveCanvas = ({
     }
   };
 
+  const ensureUrl = (url) => {
+    if (!url || typeof url !== 'string') return '';
+    const trimmed = url.trim();
+    if (/^(https?:\/\/|mailto:|tel:)/i.test(trimmed)) return trimmed;
+    return `https://${trimmed}`;
+  };
+
   // 10 ATS-Certified Template Themes
   const getTheme = (t) => {
     switch (t) {
@@ -329,7 +336,7 @@ const ResumeLiveCanvas = ({
                 className="bg-transparent hover:bg-slate-100/80 focus:bg-white rounded px-1 py-0.2 outline-none w-36"
               />
               {personal.linkedin && (
-                <>
+                <span className="inline-flex items-center gap-0.5">
                   <span>•</span>
                   <input
                     type="text"
@@ -337,15 +344,25 @@ const ResumeLiveCanvas = ({
                     placeholder="linkedin.com/in/..."
                     onChange={(e) =>
                       updateData((draft) => {
+                        draft.personal = draft.personal || {};
                         draft.personal.linkedin = e.target.value;
                       })
                     }
-                    className="bg-transparent hover:bg-slate-100/80 focus:bg-white rounded px-1 py-0.2 outline-none w-36 text-indigo-600"
+                    className="bg-transparent hover:bg-slate-100/80 focus:bg-white rounded px-1 py-0.2 outline-none w-36 text-indigo-600 underline"
                   />
-                </>
+                  <a
+                    href={ensureUrl(personal.linkedin)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Open LinkedIn"
+                    className="text-indigo-500 hover:text-indigo-800 transition p-0.5 print:hidden"
+                  >
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </span>
               )}
               {personal.github && (
-                <>
+                <span className="inline-flex items-center gap-0.5">
                   <span>•</span>
                   <input
                     type="text"
@@ -353,15 +370,25 @@ const ResumeLiveCanvas = ({
                     placeholder="github.com/..."
                     onChange={(e) =>
                       updateData((draft) => {
+                        draft.personal = draft.personal || {};
                         draft.personal.github = e.target.value;
                       })
                     }
-                    className="bg-transparent hover:bg-slate-100/80 focus:bg-white rounded px-1 py-0.2 outline-none w-32 text-indigo-600"
+                    className="bg-transparent hover:bg-slate-100/80 focus:bg-white rounded px-1 py-0.2 outline-none w-32 text-indigo-600 underline"
                   />
-                </>
+                  <a
+                    href={ensureUrl(personal.github)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Open GitHub"
+                    className="text-indigo-500 hover:text-indigo-800 transition p-0.5 print:hidden"
+                  >
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </span>
               )}
               {personal.portfolio && (
-                <>
+                <span className="inline-flex items-center gap-0.5">
                   <span>•</span>
                   <input
                     type="text"
@@ -369,12 +396,22 @@ const ResumeLiveCanvas = ({
                     placeholder="portfolio.dev"
                     onChange={(e) =>
                       updateData((draft) => {
+                        draft.personal = draft.personal || {};
                         draft.personal.portfolio = e.target.value;
                       })
                     }
-                    className="bg-transparent hover:bg-slate-100/80 focus:bg-white rounded px-1 py-0.2 outline-none w-28 text-indigo-600"
+                    className="bg-transparent hover:bg-slate-100/80 focus:bg-white rounded px-1 py-0.2 outline-none w-28 text-indigo-600 underline"
                   />
-                </>
+                  <a
+                    href={ensureUrl(personal.portfolio)}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Open Portfolio"
+                    className="text-indigo-500 hover:text-indigo-800 transition p-0.5 print:hidden"
+                  >
+                    <ExternalLink className="w-2.5 h-2.5" />
+                  </a>
+                </span>
               )}
             </div>
           </header>
@@ -723,30 +760,56 @@ const ResumeLiveCanvas = ({
                     </div>
                     <div className="flex items-center gap-1 text-slate-500 text-[11px] shrink-0">
                       {proj.liveUrl !== undefined && (
-                        <input
-                          type="text"
-                          value={proj.liveUrl || ''}
-                          placeholder="Demo Link"
-                          onChange={(e) =>
-                            updateData((draft) => {
-                              draft.projects[projIdx].liveUrl = e.target.value;
-                            })
-                          }
-                          className="w-24 text-indigo-600 bg-transparent hover:bg-slate-100/80 focus:bg-white rounded px-1 py-0.5 outline-none"
-                        />
+                        <div className="inline-flex items-center gap-0.5">
+                          <input
+                            type="text"
+                            value={proj.liveUrl || ''}
+                            placeholder="Demo Link"
+                            onChange={(e) =>
+                              updateData((draft) => {
+                                draft.projects[projIdx].liveUrl = e.target.value;
+                              })
+                            }
+                            className="w-24 text-indigo-600 bg-transparent hover:bg-slate-100/80 focus:bg-white rounded px-1 py-0.5 outline-none underline"
+                          />
+                          {proj.liveUrl && (
+                            <a
+                              href={ensureUrl(proj.liveUrl)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title="Open Live Demo"
+                              className="text-indigo-500 hover:text-indigo-800 transition p-0.5 print:hidden"
+                            >
+                              <ExternalLink className="w-2.5 h-2.5" />
+                            </a>
+                          )}
+                        </div>
                       )}
                       {proj.githubUrl !== undefined && (
-                        <input
-                          type="text"
-                          value={proj.githubUrl || ''}
-                          placeholder="GitHub Link"
-                          onChange={(e) =>
-                            updateData((draft) => {
-                              draft.projects[projIdx].githubUrl = e.target.value;
-                            })
-                          }
-                          className="w-24 text-indigo-600 bg-transparent hover:bg-slate-100/80 focus:bg-white rounded px-1 py-0.5 outline-none"
-                        />
+                        <div className="inline-flex items-center gap-0.5">
+                          <input
+                            type="text"
+                            value={proj.githubUrl || ''}
+                            placeholder="GitHub Link"
+                            onChange={(e) =>
+                              updateData((draft) => {
+                                draft.projects[projIdx].githubUrl = e.target.value;
+                              })
+                            }
+                            className="w-24 text-indigo-600 bg-transparent hover:bg-slate-100/80 focus:bg-white rounded px-1 py-0.5 outline-none underline"
+                          />
+                          {proj.githubUrl && (
+                            <a
+                              href={ensureUrl(proj.githubUrl)}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              title="Open GitHub Repo"
+                              className="text-indigo-500 hover:text-indigo-800 transition p-0.5 print:hidden"
+                            >
+                              <ExternalLink className="w-2.5 h-2.5" />
+                            </a>
+                          )}
+                        </div>
                       )}
                       <button
                         type="button"

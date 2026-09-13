@@ -18,13 +18,15 @@ const AiTools = () => {
     '/ai/remove-background': 'image',
     '/ai/remove-object': 'image',
     '/ai/review-resume': 'code',
+    '/ai/resume-builder': 'code',
   }
 
   const toolBadges = {
     '/ai/write-article': { text: 'Gemini 2.0 Flash', color: 'bg-blue-500/10 text-blue-400 border-blue-500/20' },
     '/ai/generate-images': { text: 'FLUX.1 Diffusion', color: 'bg-amber-500/10 text-amber-400 border-amber-500/20' },
     '/ai/quick-code': { text: 'Groq Llama 3.3', color: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20' },
-    '/ai/review-resume': { text: 'ATS 100-Point Score', color: 'bg-teal-500/10 text-teal-400 border-teal-500/20' },
+    '/ai/review-resume': { text: 'ATS 100-Point Audit', color: 'bg-teal-500/10 text-teal-400 border-teal-500/20' },
+    '/ai/resume-builder': { text: '10 Executive Templates', color: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' },
     '/ai/photo-cleanup': { text: 'Cutout & Inpaint', color: 'bg-rose-500/10 text-rose-400 border-rose-500/20' },
     '/ai/remove-background': { text: '1-Click Cutout', color: 'bg-rose-500/10 text-rose-400 border-rose-500/20' },
     '/ai/remove-object': { text: 'Magic Inpaint', color: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/20' },
@@ -45,7 +47,7 @@ const AiTools = () => {
   })
 
   const categories = [
-    { id: 'all', label: 'All 6 Tools' },
+    { id: 'all', label: 'All Engines' },
     { id: 'writing', label: 'Writing & Research' },
     { id: 'image', label: 'Visual & Inpainting' },
     { id: 'code', label: 'Code & Career' },
@@ -59,7 +61,7 @@ const AiTools = () => {
           <Wand2 className='w-3.5 h-3.5' /> Unified Multi-Modal Suite
         </div>
         <h2 className='text-3xl sm:text-5xl font-extrabold tracking-tight text-white'>
-          7 Purpose-Built AI Engines. <span className='text-gradient'>One Platform.</span>
+          Enterprise AI Engines. <span className='text-gradient'>One Platform.</span>
         </h2>
         <p className='mt-4 text-sm sm:text-base text-slate-400 max-w-xl mx-auto'>
           Eliminate fragmented subscriptions. Synthesize, edit, code, and evaluate from a single centralized creative hub.

@@ -16,7 +16,9 @@ import {
   Calendar,
   Wand2,
   FileDown,
+  Briefcase,
 } from 'lucide-react'
+import { useNavigate } from 'react-router-dom'
 import Swal from 'sweetalert2'
 import toast from 'react-hot-toast'
 import SmartPdfExportModal from './SmartPdfExportModal'
@@ -76,6 +78,13 @@ const getTypeConfig = (type, prompt = '') => {
         badgeBg: 'bg-amber-50 border-amber-200/80 text-amber-700',
         gradient: 'from-amber-500 to-orange-600',
       }
+    case 'resume-builder':
+      return {
+        label: 'ATS Resume',
+        icon: Briefcase,
+        badgeBg: 'bg-indigo-50 border-indigo-200/80 text-indigo-700',
+        gradient: 'from-indigo-600 to-violet-600',
+      }
     default:
       return {
         label: type || 'Creation',
@@ -106,11 +115,19 @@ const formatDate = (dateStr) => {
 }
 
 const CreationItem = ({ item, onDelete }) => {
+  const navigate = useNavigate()
   const [expanded, setExpanded] = useState(false)
   const [copied, setCopied] = useState(false)
   const [showPdfModal, setShowPdfModal] = useState(false)
   const config = getTypeConfig(item.type, item.prompt)
   const IconComponent = config.icon
+
+  let resumeObj = null
+  if (item.type === 'resume-builder') {
+    try {
+      resumeObj = typeof item.content === 'string' ? JSON.parse(item.content) : item.content
+    } catch (e) {}
+  }
 
   const handleDownload = async (e) => {
     e?.stopPropagation()
@@ -329,6 +346,73 @@ const CreationItem = ({ item, onDelete }) => {
               <pre className='p-4 bg-slate-900 text-indigo-100 rounded-xl font-mono text-xs overflow-x-auto border border-slate-800 leading-relaxed shadow-inner max-h-96'>
                 <code>{item.content}</code>
               </pre>
+            </div>
+          ) : item.type === 'resume-builder' && resumeObj ? (
+            <div className='space-y-3'>
+              <div className='flex items-center justify-between text-xs text-slate-500'>
+                <span className='font-semibold text-slate-700'>ATS Resume Summary</span>
+                <button
+                  onClick={(e) => {
+                    e.stopPropagation()
+                    navigate('/ai/resume-builder')
+                  }}
+                  className='flex items-center gap-1.5 px-3 py-1 rounded-lg bg-indigo-600 text-white font-medium hover:bg-indigo-700 transition cursor-pointer text-xs'
+                >
+                  <ExternalLink className='w-3.5 h-3.5' /> Open in Studio
+                </button>
+              </div>
+              <div className='p-4 bg-slate-50 rounded-xl border border-slate-200/80 space-y-3'>
+                <div className='flex items-start justify-between gap-4 flex-wrap'>
+                  <div>
+                    <h4 className='text-base font-bold text-slate-900'>
+                      {resumeObj.personal?.fullName || 'Candidate Resume'}
+                    </h4>
+                    <p className='text-xs font-semibold text-indigo-600'>
+                      {resumeObj.personal?.title || item.prompt}
+                    </p>
+                    {resumeObj.personal?.location && (
+                      <p className='text-[11px] text-slate-500 mt-0.5'>{resumeObj.personal.location}</p>
+                    )}
+                  </div>
+                  <div className='flex items-center gap-2'>
+                    <span className='px-2.5 py-1 rounded-md bg-emerald-50 text-emerald-700 border border-emerald-200 text-xs font-semibold'>
+                      {resumeObj.experience?.length || 0} Experiences
+                    </span>
+                    <span className='px-2.5 py-1 rounded-md bg-blue-50 text-blue-700 border border-blue-200 text-xs font-semibold'>
+                      {resumeObj.projects?.length || 0} Projects
+                    </span>
+                  </div>
+                </div>
+
+                {resumeObj.summary && (
+                  <p className='text-xs text-slate-600 italic border-l-2 border-indigo-400 pl-2.5 py-0.5'>
+                    "{resumeObj.summary}"
+                  </p>
+                )}
+
+                {/* Skills Chips */}
+                {resumeObj.skills && (
+                  <div className='pt-1'>
+                    <span className='text-[11px] font-bold text-slate-500 uppercase tracking-wider block mb-1.5'>
+                      Technical Competencies
+                    </span>
+                    <div className='flex flex-wrap gap-1.5'>
+                      {Object.values(resumeObj.skills)
+                        .flat()
+                        .filter(Boolean)
+                        .slice(0, 12)
+                        .map((sk, idx) => (
+                          <span
+                            key={idx}
+                            className='px-2 py-0.5 rounded-md bg-white border border-slate-200 text-slate-700 text-[11px] font-medium'
+                          >
+                            {sk}
+                          </span>
+                        ))}
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
           ) : (
             <div className='space-y-3'>

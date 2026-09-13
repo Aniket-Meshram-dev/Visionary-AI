@@ -19,6 +19,7 @@ import {
   Download,
   Trash2,
   Calendar,
+  Briefcase,
 } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 import CreationItem from '../components/CreationItem'
@@ -104,21 +105,23 @@ const MyCreations = () => {
   const counts = useMemo(() => {
     return {
       all: creations.length,
+      'resume-builder': creations.filter((c) => c.type === 'resume-builder').length,
+      'resume-review': creations.filter((c) => c.type === 'resume-review').length,
       article: creations.filter((c) => c.type === 'article').length,
       summary: creations.filter((c) => c.type === 'summary').length,
       'quick-code': creations.filter((c) => c.type === 'quick-code').length,
       image: creations.filter((c) => c.type === 'image').length,
-      'resume-review': creations.filter((c) => c.type === 'resume-review').length,
     }
   }, [creations])
 
   const filterTabs = [
     { key: 'all', label: 'All Assets', icon: Layers, count: counts.all },
+    { key: 'resume-builder', label: 'ATS Resumes', icon: Briefcase, count: counts['resume-builder'] },
+    { key: 'resume-review', label: 'Resume Audits', icon: FileText, count: counts['resume-review'] },
     { key: 'article', label: 'Articles', icon: SquarePen, count: counts.article },
     { key: 'summary', label: 'Summaries', icon: Hash, count: counts.summary },
     { key: 'quick-code', label: 'Code Snippets', icon: Code, count: counts['quick-code'] },
     { key: 'image', label: 'Images & Photos', icon: ImageIcon, count: counts.image },
-    { key: 'resume-review', label: 'Resume Audits', icon: FileText, count: counts['resume-review'] },
   ]
 
   return (

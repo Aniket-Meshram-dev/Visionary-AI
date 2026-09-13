@@ -1007,17 +1007,27 @@ export const resumeReview = async (req, res) => {
         const prompt = `You are a Principal Technical Recruiter, ATS (Applicant Tracking System) Specialist, and Executive Resume Coach.
 Review the following candidate resume${roleContext}${jdContext}
 
-CRITICAL: Start your response with a strictly valid JSON block enclosed in \`\`\`json and \`\`\` containing the parsed scores and keywords:
+CRITICAL ATS AUDIT & SCORING RULES:
+1. DYNAMIC & TRANSPARENT SCORING: Calculate REAL scores between 0 and 100 based strictly on this candidate's actual resume content. DO NOT reuse canned numbers or presets.
+2. EVALUATION RUBRIC:
+   - "keyword_score" (0-100): Measure presence, density, and relevance of hard skills, domain tools, frameworks, and core terminology required for ${target_role || 'the target industry'}${job_description ? ' against the provided Job Description' : ''}. Penalize if essential tools or technologies are missing.
+   - "impact_score" (0-100): Quantify how many bullet points contain verifiable metrics, numbers, percentages, throughput, scale, latency reduction, revenue, or team size. Bullets without numbers should score 40-60. Bullets with strong Google XYZ metrics should score 85-98.
+   - "formatting_score" (0-100): Evaluate ATS parsability, standard headers (Summary, Experience, Projects, Skills, Education), absence of complex multi-column tables, clean bullet hierarchy, and reverse-chronological order.
+   ${job_description ? '- "jd_match_score" (0-100): Exact alignment between the candidate\'s demonstrated qualifications and the explicit requirements in the Job Description.\n' : ''}
+   - "overall_score" (0-100): Weighted calculation (${job_description ? '30% keyword + 30% impact + 20% formatting + 20% jd_match' : '40% keyword + 40% impact + 20% formatting'}). Round to the nearest whole integer.
+3. EXTRACT ACTUAL DATA: Identify 4 to 6 real missing keywords and 4 to 6 genuinely matched skills extracted directly from the candidate's text.
+
+CRITICAL: Start your response with a strictly valid JSON block enclosed in \`\`\`json and \`\`\` containing the calculated scores and keywords:
 \`\`\`json
 {
-  "overall_score": 82,
-  "keyword_score": 75,
-  "impact_score": 85,
-  "formatting_score": 88,
-  ${job_description ? '"jd_match_score": 79,' : ''}
-  "summary_headline": "One-line punchy executive verdict on the resume.",
-  "missing_keywords": ["Keyword1", "Keyword2", "Keyword3", "Keyword4"],
-  "matched_skills": ["Skill1", "Skill2", "Skill3", "Skill4"]
+  "overall_score": <calculated integer 0-100>,
+  "keyword_score": <calculated integer 0-100>,
+  "impact_score": <calculated integer 0-100>,
+  "formatting_score": <calculated integer 0-100>,
+  ${job_description ? '"jd_match_score": <calculated integer 0-100>,' : ''}
+  "summary_headline": "<one-line punchy executive verdict highlighting biggest strength and highest priority fix>",
+  "missing_keywords": ["<missing skill/tool 1>", "<missing skill/tool 2>", "<missing skill/tool 3>", "<missing skill/tool 4>"],
+  "matched_skills": ["<verified skill 1>", "<verified skill 2>", "<verified skill 3>", "<verified skill 4>"]
 }
 \`\`\`
 
@@ -1026,7 +1036,7 @@ Then, provide a thorough, professional markdown evaluation covering:
 Detailed breakdown explaining why each score was awarded, alignment with modern ATS parsers, and ${target_role ? `fit for ${target_role}` : 'industry standards'}.
 
 ## 2. Key Strengths & Differentiators
-Bulleted highlights of compelling achievements, quantifiable metrics, and standout qualifications.
+Bulleted highlights of compelling achievements, quantifiable metrics, and standout qualifications found in the candidate's resume.
 
 ## 3. High-Priority Weaknesses & Missing Keywords
 Crucial gaps, passive phrasing, missing technical tools, or formatting pitfalls.
@@ -1039,22 +1049,22 @@ ${extractedText}`;
 
         const response = await runChatCompletion({
             messages: [{ role: "user", content: prompt }],
-            temperature: 0.4,
+            temperature: 0.35,
             max_tokens: 4096,
         });
 
         const rawContent = response.choices[0].message.content;
 
-        // Extract structured JSON metrics if present
+        // Default initial metrics in case model fails to output JSON
         let metrics = {
-            overall_score: 78,
-            keyword_score: 75,
-            impact_score: 80,
-            formatting_score: 82,
-            jd_match_score: job_description ? 76 : null,
-            summary_headline: "Solid foundational resume with opportunities to increase quantifiable impact.",
-            missing_keywords: ["System Architecture", "Cloud Native", "CI/CD Automation", "Performance Metrics"],
-            matched_skills: ["Full-Stack Development", "Problem Solving", "API Design", "Agile Collaboration"]
+            overall_score: 72,
+            keyword_score: 70,
+            impact_score: 65,
+            formatting_score: 80,
+            jd_match_score: job_description ? 68 : null,
+            summary_headline: "Resume analyzed with dynamic ATS scoring.",
+            missing_keywords: [],
+            matched_skills: []
         };
 
         const jsonMatch = rawContent.match(/```json\s*([\s\S]*?)\s*```/i);
@@ -1063,18 +1073,26 @@ ${extractedText}`;
         if (jsonMatch && jsonMatch[1]) {
             try {
                 const parsed = JSON.parse(jsonMatch[1].trim());
-                if (typeof parsed.overall_score === 'number') {
+                if (typeof parsed.overall_score === 'number' || typeof parsed.keyword_score === 'number') {
+                    const kw = typeof parsed.keyword_score === 'number' ? Math.min(100, Math.max(0, parsed.keyword_score)) : 70;
+                    const imp = typeof parsed.impact_score === 'number' ? Math.min(100, Math.max(0, parsed.impact_score)) : 65;
+                    const fmt = typeof parsed.formatting_score === 'number' ? Math.min(100, Math.max(0, parsed.formatting_score)) : 80;
+                    const jd = typeof parsed.jd_match_score === 'number'
+                        ? Math.min(100, Math.max(0, parsed.jd_match_score))
+                        : (job_description ? 70 : null);
+                    const ov = typeof parsed.overall_score === 'number'
+                        ? Math.min(100, Math.max(0, parsed.overall_score))
+                        : (jd !== null ? Math.round(kw * 0.3 + imp * 0.3 + fmt * 0.2 + jd * 0.2) : Math.round(kw * 0.4 + imp * 0.4 + fmt * 0.2));
+
                     metrics = {
-                        overall_score: Math.min(100, Math.max(0, parsed.overall_score)),
-                        keyword_score: Math.min(100, Math.max(0, parsed.keyword_score || 75)),
-                        impact_score: Math.min(100, Math.max(0, parsed.impact_score || 80)),
-                        formatting_score: Math.min(100, Math.max(0, parsed.formatting_score || 85)),
-                        jd_match_score: typeof parsed.jd_match_score === 'number'
-                            ? Math.min(100, Math.max(0, parsed.jd_match_score))
-                            : (job_description ? 76 : null),
+                        overall_score: ov,
+                        keyword_score: kw,
+                        impact_score: imp,
+                        formatting_score: fmt,
+                        jd_match_score: jd,
                         summary_headline: parsed.summary_headline || metrics.summary_headline,
-                        missing_keywords: Array.isArray(parsed.missing_keywords) ? parsed.missing_keywords : metrics.missing_keywords,
-                        matched_skills: Array.isArray(parsed.matched_skills) ? parsed.matched_skills : metrics.matched_skills,
+                        missing_keywords: Array.isArray(parsed.missing_keywords) ? parsed.missing_keywords : [],
+                        matched_skills: Array.isArray(parsed.matched_skills) ? parsed.matched_skills : [],
                     };
                 }
                 // Strip json block from visible markdown

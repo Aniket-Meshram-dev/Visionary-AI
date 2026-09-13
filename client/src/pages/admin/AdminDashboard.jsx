@@ -548,7 +548,7 @@ const AdminDashboard = () => {
             {/* Filters */}
             <div className='flex flex-wrap items-center justify-between gap-3'>
               <div className='flex items-center gap-2'>
-                {['all', 'image', 'article', 'quick-code', 'summary', 'resume-review'].map((t) => (
+                {['all', 'resume-builder', 'resume-review', 'image', 'article', 'quick-code', 'summary'].map((t) => (
                   <button
                     key={t}
                     onClick={() => setCreationFilter(t)}

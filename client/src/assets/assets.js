@@ -5,7 +5,7 @@ import star_icon from "./star_icon.svg";
 import star_dull_icon from "./star_dull_icon.svg";
 import profile_img_1 from "./profile_img_1.png";
 import arrow_icon from "./arrow_icon.svg";
-import { SquarePen, FileText, Code2, Image, Eraser, Scissors, ClipboardCheck, Wand2 } from 'lucide-react'
+import { SquarePen, FileText, Code2, Image, Eraser, Scissors, ClipboardCheck, Wand2, Briefcase } from 'lucide-react'
 import ai_gen_img_1 from "./ai_gen_img_1.png";
 import ai_gen_img_2 from "./ai_gen_img_2.png";
 import ai_gen_img_3 from "./ai_gen_img_3.png";
@@ -80,5 +80,12 @@ export const AiToolsData = [
         Icon: ClipboardCheck,
         bg: { from: '#12B7AC', to: '#08B6CE' },
         path: '/ai/review-resume'
+    },
+    {
+        title: 'AI ATS Resume Studio',
+        description: 'Interactive AI interview builder, transparent ATS scoring, 10 executive templates & 1-click tailored optimization.',
+        Icon: Briefcase,
+        bg: { from: '#6366F1', to: '#4F46E5' },
+        path: '/ai/resume-builder'
     }
 ]

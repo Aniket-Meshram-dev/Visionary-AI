@@ -114,6 +114,32 @@ function getPdfTemplateTheme(template) {
 }
 
 /**
+ * Normalizes a URL so browsers and PDF viewers treat it as an active clickable URI action.
+ */
+export function ensureUrl(url) {
+  if (!url || typeof url !== 'string') return '';
+  const trimmed = url.trim();
+  if (/^(https?:\/\/|mailto:|tel:)/i.test(trimmed)) return trimmed;
+  return `https://${trimmed}`;
+}
+
+/**
+ * Automatically detects web URLs inside bullet points or descriptions and converts them into clickable <a> tags.
+ */
+export function autoLinkText(text) {
+  if (!text || typeof text !== 'string') return text || '';
+  // Avoid re-linking if already an <a> tag
+  if (/<a\s+/i.test(text)) return text;
+  return text.replace(
+    /((?:https?:\/\/|www\.)[^\s<]+|[a-zA-Z0-9.-]+\.(?:com|org|io|dev|app|net|in|ai|co)(?:\/[^\s<]*)?)/gi,
+    (match) => {
+      const href = ensureUrl(match);
+      return `<a href="${href}" target="_blank" rel="noopener noreferrer">${match}</a>`;
+    }
+  );
+}
+
+/**
  * 1. Generate ATS-Compliant Printable HTML (Vector Print)
  */
 export function generateResumePrintableHtml(resumeData, options = {}) {
@@ -137,14 +163,17 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
   const primaryColor = theme.primaryColor;
   const headingBorder = theme.headingBorder;
 
-  // Contact items line
+  // Contact items line with normalized active hyperlinks
+  const cleanPhone = personal.phone ? personal.phone.trim() : '';
+  const phoneDigits = cleanPhone.replace(/[^0-9+]/g, '');
+
   const contactParts = [
-    personal.phone,
-    personal.email ? `<a href="mailto:${personal.email}">${personal.email}</a>` : null,
-    personal.location,
-    personal.linkedin ? `<a href="${personal.linkedin}" target="_blank">LinkedIn</a>` : null,
-    personal.github ? `<a href="${personal.github}" target="_blank">GitHub</a>` : null,
-    personal.portfolio ? `<a href="${personal.portfolio}" target="_blank">Portfolio</a>` : null,
+    cleanPhone ? `<a href="tel:${phoneDigits}">${cleanPhone}</a>` : null,
+    personal.email ? `<a href="mailto:${personal.email.trim()}">${personal.email.trim()}</a>` : null,
+    personal.location ? `<span>${personal.location}</span>` : null,
+    personal.linkedin ? `<a href="${ensureUrl(personal.linkedin)}" target="_blank" rel="noopener noreferrer">LinkedIn</a>` : null,
+    personal.github ? `<a href="${ensureUrl(personal.github)}" target="_blank" rel="noopener noreferrer">GitHub</a>` : null,
+    personal.portfolio ? `<a href="${ensureUrl(personal.portfolio)}" target="_blank" rel="noopener noreferrer">Portfolio</a>` : null,
   ].filter(Boolean);
 
   return `<!DOCTYPE html>
@@ -182,8 +211,11 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
       padding: ${isOnePage ? '4px 0' : '10px 0'};
     }
     a {
-      color: inherit;
-      text-decoration: none;
+      color: ${primaryColor};
+      text-decoration: underline;
+      text-decoration-thickness: 1px;
+      text-underline-offset: 1.5px;
+      cursor: pointer;
     }
     /* Header */
     .resume-header {
@@ -356,7 +388,7 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
                 ${
                   Array.isArray(exp.bullets) && exp.bullets.length > 0
                     ? `<ul class="bullet-list">
-                        ${exp.bullets.map((b) => `<li>${b}</li>`).join('')}
+                        ${exp.bullets.map((b) => `<li>${autoLinkText(b)}</li>`).join('')}
                       </ul>`
                     : ''
                 }
@@ -379,13 +411,13 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
               <div class="entry-item">
                 <div class="entry-top">
                   <span class="entry-role">${p.title || 'Project'}</span>
-                  <span class="entry-meta">${[p.liveUrl ? `<a href="${p.liveUrl}" target="_blank">Live Demo</a>` : null, p.githubUrl ? `<a href="${p.githubUrl}" target="_blank">Code Repo</a>` : null].filter(Boolean).join(' | ')}</span>
+                  <span class="entry-meta">${[p.liveUrl ? `<a href="${ensureUrl(p.liveUrl)}" target="_blank" rel="noopener noreferrer">Live Demo</a>` : null, p.githubUrl ? `<a href="${ensureUrl(p.githubUrl)}" target="_blank" rel="noopener noreferrer">Code Repo</a>` : null].filter(Boolean).join(' | ')}</span>
                 </div>
                 ${p.techStack?.length ? `<div class="tech-stack-tag">Technologies: ${Array.isArray(p.techStack) ? p.techStack.join(', ') : p.techStack}</div>` : ''}
                 ${
                   Array.isArray(p.bullets) && p.bullets.length > 0
                     ? `<ul class="bullet-list">
-                        ${p.bullets.map((b) => `<li>${b}</li>`).join('')}
+                        ${p.bullets.map((b) => `<li>${autoLinkText(b)}</li>`).join('')}
                       </ul>`
                     : ''
                 }
@@ -416,7 +448,7 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
                 ${
                   Array.isArray(edu.highlights) && edu.highlights.length > 0
                     ? `<ul class="bullet-list">
-                        ${edu.highlights.map((h) => `<li>${h}</li>`).join('')}
+                        ${edu.highlights.map((h) => `<li>${autoLinkText(h)}</li>`).join('')}
                       </ul>`
                     : ''
                 }
@@ -435,7 +467,7 @@ export function generateResumePrintableHtml(resumeData, options = {}) {
             <h2 class="section-title">Honors & Certifications</h2>
             <ul class="bullet-list">
               ${certifications.map((c) => `<li><strong>${c.name}</strong>${c.issuer ? ` – ${c.issuer}` : ''}${c.year ? ` (${c.year})` : ''}</li>`).join('')}
-              ${achievements.map((a) => `<li>${a}</li>`).join('')}
+              ${achievements.map((a) => `<li>${autoLinkText(a)}</li>`).join('')}
             </ul>
           </section>`
         : ''
@@ -502,14 +534,50 @@ export async function exportResumeToDocx(resumeData, fileName = 'resume.docx') {
   const certifications = Array.isArray(resumeData?.certifications) ? resumeData.certifications : [];
   const achievements = Array.isArray(resumeData?.achievements) ? resumeData.achievements : [];
 
-  const contactList = [
-    personal.phone,
-    personal.email,
-    personal.location,
-    personal.linkedin,
-    personal.github,
-    personal.portfolio,
-  ].filter(Boolean).join(' | ');
+  const contactChildren = [];
+  if (personal.phone) {
+    contactChildren.push(new TextRun({ text: personal.phone, size: 18, color: '4B5563' }));
+  }
+  if (personal.email) {
+    if (contactChildren.length) contactChildren.push(new TextRun({ text: ' • ', size: 18, color: '94A3B8' }));
+    contactChildren.push(
+      new ExternalHyperlink({
+        children: [new TextRun({ text: personal.email, size: 18, color: '4F46E5', underline: { type: UnderlineType.SINGLE } })],
+        link: `mailto:${personal.email.trim()}`,
+      })
+    );
+  }
+  if (personal.location) {
+    if (contactChildren.length) contactChildren.push(new TextRun({ text: ' • ', size: 18, color: '94A3B8' }));
+    contactChildren.push(new TextRun({ text: personal.location, size: 18, color: '4B5563' }));
+  }
+  if (personal.linkedin) {
+    if (contactChildren.length) contactChildren.push(new TextRun({ text: ' • ', size: 18, color: '94A3B8' }));
+    contactChildren.push(
+      new ExternalHyperlink({
+        children: [new TextRun({ text: 'LinkedIn', size: 18, color: '4F46E5', underline: { type: UnderlineType.SINGLE } })],
+        link: ensureUrl(personal.linkedin),
+      })
+    );
+  }
+  if (personal.github) {
+    if (contactChildren.length) contactChildren.push(new TextRun({ text: ' • ', size: 18, color: '94A3B8' }));
+    contactChildren.push(
+      new ExternalHyperlink({
+        children: [new TextRun({ text: 'GitHub', size: 18, color: '4F46E5', underline: { type: UnderlineType.SINGLE } })],
+        link: ensureUrl(personal.github),
+      })
+    );
+  }
+  if (personal.portfolio) {
+    if (contactChildren.length) contactChildren.push(new TextRun({ text: ' • ', size: 18, color: '94A3B8' }));
+    contactChildren.push(
+      new ExternalHyperlink({
+        children: [new TextRun({ text: 'Portfolio', size: 18, color: '4F46E5', underline: { type: UnderlineType.SINGLE } })],
+        link: ensureUrl(personal.portfolio),
+      })
+    );
+  }
 
   const children = [];
 
@@ -529,13 +597,7 @@ export async function exportResumeToDocx(resumeData, fileName = 'resume.docx') {
     new Paragraph({
       alignment: AlignmentType.CENTER,
       spacing: { after: 200 },
-      children: [
-        new TextRun({
-          text: contactList,
-          size: 18, // 9pt
-          color: '4B5563',
-        }),
-      ],
+      children: contactChildren.length ? contactChildren : [new TextRun({ text: personal.location || '', size: 18 })],
     })
   );
 
