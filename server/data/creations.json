@@ -1,5 +1,55 @@
 [
   {
+    "id": "98e789d0-2152-4b03-8c1c-93dca3b1e670",
+    "user_id": "1cc85ede-b682-4897-b705-6b9e6fe4f677",
+    "prompt": "ATS Resume Audit for Senior Full Stack AI Engineer (Mid-Level)",
+    "content": "## 1. Executive ATS Scoring Breakdown  \n\n| Metric | Score | Why this score? |\n|--------|-------|-----------------|\n| **Keyword Score (88/100)** | 88 | The resume hits most high‑impact full‑stack and AI keywords: JavaScript/TypeScript, React, Next.js, Node.js, Express, PostgreSQL, Redis, Docker, AWS, Google Gemini, Groq Compound. However, core ML frameworks (TensorFlow, PyTorch, OpenCV) and orchestration/container‑orchestration tools (Kubernetes, Apache Kafka, LangChain) are absent, pulling the score down. |\n| **Impact Score (92/100)** | 92 | Every bullet point includes a concrete metric (e.g., “45% latency reduction”, “50,000+ daily requests”, “99.98% uptime”, “10,000+ paying subscribers”). The density of quantifiable results is high, earning a near‑top impact rating. |\n| **Formatting Score (95/100)** | 95 | The document follows ATS‑friendly conventions: clear section headers, reverse‑chronological order, simple bullet hierarchy, no multi‑column tables or graphics. Minor improvement could be adding an explicit “Projects” or “Education” header for completeness. |\n| **Overall Score (90/100)** | 90 | Weighted as 40 % keyword + 40 % impact + 20 % formatting → (0.4 × 88) + (0.4 × 92) + (0.2 × 95) ≈ 90. Rounded to the nearest integer. |\n\n## 2. Key Strengths & Differentiators  \n\n- **AI‑centric product experience** – Built a “multi‑model AI content generation engine” handling 50k+ requests/day with 99.98 % uptime.  \n- **Performance optimization** – Cut API latency by 45 % (summary) and database response times by 42 % via query tuning and Redis caching.  \n- **Scalable SaaS delivery** – Designed a Stripe‑based subscription system supporting >10k paying users.  \n- **Full‑stack breadth** – Proficient across the stack: React/Next.js (frontend), Node.js/Express (backend), PostgreSQL/Redis (data), Docker/AWS (deployment).  \n- **Quantitative focus** – Every achievement is backed by numbers, demonstrating data‑driven impact.  \n\n## 3. High‑Priority Weaknesses & Missing Keywords  \n\n| Category | Gaps |\n|----------|------|\n| **Machine‑Learning frameworks** | No mention of TensorFlow, PyTorch, OpenCV, or other model‑training libraries. |\n| **Container orchestration / streaming** | Absent Kubernetes, Docker‑Swarm, Apache Kafka, or similar infra tools that senior AI engineers often need. |\n| **LLM‑specific tooling** | LangChain or similar prompt‑engineering frameworks are missing, despite the AI focus. |\n| **Project / Education sections** | No dedicated “Projects” or “Education” header; ATS may look for these standard sections. |\n| **Passive phrasing** | A few bullets start with “Designed” or “Developed” without a direct outcome verb (“delivered”, “increased”). |\n\n## 4. Step‑by‑Step Action Plan (Before Submitting)\n\n1. **Add missing core keywords**  \n   - Insert a “Machine Learning” sub‑section under Technical Skills: `TensorFlow, PyTorch, OpenCV`.  \n   - Add “Container & Streaming” line: `Kubernetes, Apache Kafka`.  \n   - Include LLM tooling: `LangChain, Prompt Engineering`.  \n\n2. **Create explicit “Projects” and “Education” sections**  \n   - List any personal AI/ML projects (e.g., “Fine‑tuned a GPT‑4 based chatbot using LangChain – 30 % faster response time”).  \n   - Add degree, certifications (e.g., “AWS Certified Solutions Architect”).  \n\n3. **Refine bullet language for impact**  \n   - Change “Designed ATS Resume Builder & Auditor suite” → “Delivered an ATS Resume Builder that increased candidate keyword match rates by 27 %”.  \n   - Ensure every bullet starts with a strong action verb and ends with a measurable outcome.  \n\n4. **Highlight CI/CD / DevOps competence**  \n   - If applicable, add a line such as `CI/CD: GitHub Actions, Terraform` to show end‑to‑end delivery capability.  \n\n5. **Proofread for consistency**  \n   - Ensure all dates are formatted uniformly (e.g., `Jan 2021 – Dec 2023`).  \n   - Verify contact links are clickable and use full URLs (`https://github.com/aniket080808`).  \n\nImplementing these tweaks will push the keyword score into the high‑90s, tighten the overall ATS match, and make the candidate’s profile unmistakably aligned with a Senior Full Stack AI Engineer role.",
+    "type": "resume-review",
+    "publish": false,
+    "likes": [],
+    "created_at": "2026-09-13T12:30:54.970Z"
+  },
+  {
+    "id": "a1ada4b6-7213-48b7-beb9-36e45c54475b",
+    "user_id": "1cc85ede-b682-4897-b705-6b9e6fe4f677",
+    "prompt": "Futuristic cyberpunk city at night with flying cars and holographic neon signs",
+    "content": "https://res.cloudinary.com/dcgq0ots5/image/upload/v1789302650/quickai_creations/drv0iahbntq7z4vi770j.jpg",
+    "type": "image",
+    "publish": false,
+    "likes": [],
+    "created_at": "2026-09-13T12:30:52.145Z"
+  },
+  {
+    "id": "075d0443-bbad-4df8-a2c1-23898a1adf67",
+    "user_id": "1cc85ede-b682-4897-b705-6b9e6fe4f677",
+    "prompt": "Summarize the following text and reduce its length by approximately 50%. Provide a clear, concise summary with headings and bullet points where helpful:\n\nArtificial Intelligence in 2026 has transitioned from isolated prompt-response models to persistent, multi-agent autonomous ecosystems. Modern enterprise applications leverage self-orchestrating agent loops capable of dynamic code compilation, continuous integration testing, localized semantic memory retrieval, and cross-platform publishing. By delegating complex asynchronous workflows to specialized agentic runtimes, developer velocity increases tenfold while operational cognitive overhead drops significantly. Furthermore, next-generation LLM distillation enables lightning-fast edge execution with near-zero latency, transforming how SaaS solutions deliver real-time intelligence.\n\n(Provide the output formatted as clear, concise bulleted key takeaways)",
+    "content": "**Reasoning & Work‑through**\n\n1. **Identify the core ideas**  \n   - AI in 2026 has moved from single‑prompt models to **persistent, multi‑agent autonomous ecosystems**.  \n   - Enterprise apps now use **self‑orchestrating agent loops** that can:  \n     • Compile code dynamically  \n     • Run continuous‑integration tests  \n     • Retrieve localized semantic memory  \n     • Publish across platforms.  \n   - Delegating complex, asynchronous workflows to **specialized agentic runtimes** yields:  \n     • ~10× increase in developer velocity  \n     • Significant drop in operational cognitive overhead.  \n   - **Next‑generation LLM distillation** provides ultra‑fast edge execution with near‑zero latency, reshaping real‑time SaaS intelligence.\n\n2. **Select the most important points**  \n   - Focus on the shift in AI architecture, the capabilities it enables, the productivity/overhead benefits, and the impact of LLM distillation.\n\n3. **Compress the text (~50 % reduction)**  \n   - Strip filler language while preserving meaning.  \n   - Organize into headings with concise bullet points.\n\n---\n\n## Key Takeaways: AI in 2026\n\n### 1. Evolution of AI Architecture  \n- Shift from isolated prompt‑response models to **persistent, multi‑agent autonomous ecosystems**.\n\n### 2. Enterprise Application Capabilities  \n- **Self‑orchestrating agent loops** that handle:  \n  • Dynamic code compilation  \n  • Continuous integration testing  \n  • Local semantic‑memory retrieval  \n  • Cross‑platform publishing.\n\n### 3. Benefits of Specialized Agentic Runtimes  \n- **Developer velocity** ↑ 10×  \n- **Operational cognitive overhead** ↓ significantly.\n\n### 4. Impact of Next‑Gen LLM Distillation  \n- Enables **edge execution with near‑zero latency**.  \n- Redefines how SaaS delivers **real‑time intelligence**.",
+    "type": "summary",
+    "publish": false,
+    "likes": [],
+    "created_at": "2026-09-13T12:30:07.591Z"
+  },
+  {
+    "id": "019ab7e2-70fd-4e71-8b04-a0230b7133f2",
+    "user_id": "1cc85ede-b682-4897-b705-6b9e6fe4f677",
+    "prompt": "Futuristic cyberpunk city at night with flying cars and holographic neon signs",
+    "content": "https://res.cloudinary.com/dcgq0ots5/image/upload/v1789302419/quickai_creations/varcvzdladfmsutliwgn.jpg",
+    "type": "image",
+    "publish": false,
+    "likes": [],
+    "created_at": "2026-09-13T12:27:00.403Z"
+  },
+  {
+    "id": "b50e9fe8-55e1-4c42-9990-8a6a50a36f7a",
+    "user_id": "1cc85ede-b682-4897-b705-6b9e6fe4f677",
+    "prompt": "Summarize the following text and reduce its length by approximately 50%. Provide a clear, concise summary with headings and bullet points where helpful:\n\nArtificial Intelligence in 2026 has transitioned from isolated prompt-response models to persistent, multi-agent autonomous ecosystems. Modern enterprise applications leverage self-orchestrating agent loops capable of dynamic code compilation, continuous integration testing, localized semantic memory retrieval, and cross-platform publishing. By delegating complex asynchronous workflows to specialized agentic runtimes, developer velocity increases tenfold while operational cognitive overhead drops significantly. Furthermore, next-generation LLM distillation enables lightning-fast edge execution with near-zero latency, transforming how SaaS solutions deliver real-time intelligence.\n\n(Provide the output formatted as clear, concise bulleted key takeaways)",
+    "content": "**Reasoning (how the summary was created)**  \n\n1. **Identify the core ideas** –  \n   * Shift from single‑prompt LLMs to persistent, multi‑agent ecosystems.  \n   * Enterprise apps now run self‑orchestrating agent loops that can compile code, run CI tests, retrieve semantic memory locally, and publish across platforms.  \n   * Delegating async workflows to dedicated “agentic runtimes” boosts developer speed (~10×) and cuts cognitive overhead.  \n   * New LLM‑distillation techniques give edge‑level execution with near‑zero latency, reshaping real‑time SaaS intelligence.\n\n2. **Select the most important points** – kept only the high‑level capabilities, benefits, and impact.\n\n3. **Compress length** – combined related details into concise bullet items and removed redundant phrasing, achieving roughly a 50 % reduction.\n\n4. **Format** – added clear headings and bullet points for quick scanning.\n\n---\n\n## Key Takeaways: AI in 2026\n\n### 1. Evolution of AI Architecture  \n- Moved from isolated prompt‑response models to **persistent, multi‑agent autonomous ecosystems**.\n\n### 2. Capabilities of Modern Enterprise Applications  \n- Use **self‑orchestrating agent loops** that provide:  \n  - Dynamic code compilation  \n  - Continuous integration (CI) testing  \n  - Localized semantic‑memory retrieval  \n  - Cross‑platform publishing\n\n### 3. Benefits of Specialized Agentic Runtimes  \n- **Developer velocity** ↑ ≈ 10×  \n- **Operational cognitive overhead** ↓ significantly\n\n### 4. Impact of Next‑Generation LLM Distillation  \n- Enables **edge execution with near‑zero latency**  \n- Redefines how SaaS delivers **real‑time intelligence**.",
+    "type": "summary",
+    "publish": false,
+    "likes": [],
+    "created_at": "2026-09-13T12:26:06.535Z"
+  },
+  {
     "id": "a1288093-cd9f-4753-a13c-19276fe69832",
     "user_id": "1cc85ede-b682-4897-b705-6b9e6fe4f677",
     "prompt": "Auto-Fixed ATS Resume: Databse Engineer @ Cognizant",
@@ -286,7 +336,9 @@
     "content": "https://res.cloudinary.com/dcgq0ots5/image/upload/v1789217393/quickai_creations/edqwkviu4df9gle7she3.jpg",
     "type": "image",
     "publish": true,
-    "likes": [],
+    "likes": [
+      "1cc85ede-b682-4897-b705-6b9e6fe4f677"
+    ],
     "created_at": "2026-09-12T12:49:55.391Z"
   },
   {
