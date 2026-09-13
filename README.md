@@ -40,6 +40,24 @@
 
 ---
 
+## 🎬 Full 1080p Video Walkthrough (End-to-End Demo)
+
+<div align="center">
+
+<video src="./recordings/visionary-ai-full-walkthrough.mp4" controls="controls" width="100%" poster="./recordings/thumbnail.png" style="max-width: 900px; border-radius: 12px; border: 1px solid rgba(255,255,255,0.1);">
+  Your browser does not support the video tag.
+</video>
+
+<br/><br/>
+
+[![Watch 1080p Full Demo Video](./recordings/thumbnail.png)](https://github.com/Aniket-Meshram-dev/Visionary-AI/raw/main/recordings/visionary-ai-full-walkthrough.mp4)
+
+<sub>▶️ <b>[Click here to watch or download the full 1080p walkthrough MP4 (3m 06s)](https://github.com/Aniket-Meshram-dev/Visionary-AI/raw/main/recordings/visionary-ai-full-walkthrough.mp4)</b> covering every single page, feature, and interactive AI tool.</sub>
+
+</div>
+
+---
+
 ## 📸 Product Walkthrough
 
 <div align="center">
