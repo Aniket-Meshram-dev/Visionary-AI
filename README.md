@@ -44,7 +44,6 @@
 
 <div align="center">
 
-<!-- TODO: replace with real screenshot -->
 <img src="./docs/screenshots/dashboard.png" width="90%" alt="Visionary.ai Workspace Dashboard"/>
 
 <sub><b>Figure 1 —</b> Multi-Tool Command Center with live usage telemetry and quick tool launcher</sub>
@@ -54,50 +53,40 @@
 <table>
 <tr>
 <td width="50%" align="center">
-<!-- TODO: replace with real screenshot -->
 <img src="./docs/screenshots/article-writer.png" width="100%" alt="Real-Time AI Article Writer"/>
 <sub><b>Real-Time SSE Article Writer</b><br/>Streaming Markdown + outline staging + repurposing</sub>
 </td>
 <td width="50%" align="center">
-<!-- TODO: replace with real screenshot -->
 <img src="./docs/screenshots/summarizer-mindmap.png" width="100%" alt="Smart Summarizer & Mindmap"/>
 <sub><b>Summarizer + Mindmap</b><br/>Web/YouTube ingestion with Mermaid.js concept maps</sub>
 </td>
 </tr>
 <tr>
 <td width="50%" align="center">
-<!-- TODO: replace with real screenshot -->
 <img src="./docs/screenshots/image-studio.png" width="100%" alt="AI 4K Image Generation Studio"/>
 <sub><b>4K Image Generation Studio</b><br/>Style-aware prompt enrichment + Cloudinary CDN</sub>
 </td>
 <td width="50%" align="center">
-<!-- TODO: replace with real screenshot -->
 <img src="./docs/screenshots/photo-cleanup.png" width="100%" alt="AI Photo Cleanup & Inpainting"/>
 <sub><b>Photo Cleanup & Inpainting</b><br/>Neural background removal + generative object removal</sub>
 </td>
 </tr>
 <tr>
 <td width="50%" align="center">
-<!-- TODO: replace with real screenshot -->
 <img src="./docs/screenshots/resume-builder.png" width="100%" alt="Interactive ATS Resume Builder"/>
 <sub><b>Interactive ATS Resume Builder</b><br/>Live A4 canvas + interview probing + PDF/DOCX export</sub>
 </td>
 <td width="50%" align="center">
-<!-- TODO: replace with real screenshot -->
 <img src="./docs/screenshots/admin-dashboard.png" width="100%" alt="Executive Admin Dashboard"/>
 <sub><b>Admin Control Center</b><br/>MRR tracking, token telemetry, user & content moderation</sub>
 </td>
 </tr>
 </table>
 
-<!-- TODO: replace with real screenshot -->
 <img src="./docs/screenshots/community-feed.png" width="90%" alt="Community Discovery Feed"/>
 <sub><b>Figure 8 —</b> Public Community Feed with social favoriting and deep-linkable share pages</sub>
 
 </div>
-
-> [!NOTE]
-> Drop your real captures into `docs/screenshots/` using the filenames above (or record a 10–15s GIF of one flow with [ScreenToGif](https://www.screentogif.com/) / [Kap](https://getkap.co/) and swap in `dashboard-demo.gif`) — the paths are already wired up, nothing else needs to change.
 
 ---
 
