@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:4F46E5,100:00F2FE&height=220&section=header&text=Visionary.ai&fontSize=70&fontColor=ffffff&animation=fadeIn&fontAlignY=38&desc=Next-Gen%20Multi-Modal%20AI%20Creative%20Studio%20%26%20Career%20Acceleration%20Platform&descAlignY=58&descSize=18" width="100%" />
+<img src="./docs/screenshots/landing-hero.png" width="100%" alt="Visionary.ai Hero Banner" style="border-radius: 12px; margin-bottom: 12px; border: 1px solid rgba(255,255,255,0.1);" />
 
 <br/>
 
@@ -15,7 +15,7 @@
 
 <br/>
 
-![React](https://skillicons.dev/icons?i=react,vite,tailwind,nodejs,express,supabase,postgres,stripe,vercel,cloudflare&theme=dark)
+![Tech Stack](https://skillicons.dev/icons?i=react,vite,tailwind,nodejs,express,supabase,postgres,vercel,cloudflare&theme=dark)
 
 <br/>
 
@@ -770,7 +770,7 @@ Supporting Stripe (USD, cents) and Razorpay (INR, paise) meant two different web
 ### Aniket Meshram
 
 [![GitHub](https://img.shields.io/badge/GitHub-Aniket--Meshram--dev-181717?style=for-the-badge&logo=github)](https://github.com/Aniket-Meshram-dev)
-[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/aniket-meshram)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Connect-0A66C2?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/aniket-meshram-dev/)
 [![Email](https://img.shields.io/badge/Email-Contact-EA4335?style=for-the-badge&logo=gmail&logoColor=white)](mailto:aniketmeshram445@gmail.com)
 
 </div>
@@ -784,9 +784,5 @@ Licensed under the **MIT License** — see [LICENSE](./LICENSE) for details.
 <div align="center">
 
 ### ⭐ If this project helped you, consider giving it a star!
-
-<img src="https://api.star-history.com/svg?repos=Aniket-Meshram-dev/Visionary-AI&type=Date" width="60%" alt="Star History Chart"/>
-
-<img src="https://capsule-render.vercel.app/api?type=waving&color=0:00F2FE,100:4F46E5&height=120&section=footer" width="100%" />
 
 </div>
